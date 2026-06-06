@@ -62,3 +62,108 @@ body { font-family: var(--font-inter), Inter, system-ui, sans-serif; background:
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.4; transform: scale(0.8); }
 }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-right {
+    display: none !important;
+  }
+  .hero-stats {
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+  .hero-stats > div {
+    flex: 1 1 40% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* About */
+  .about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .about-img-wrap {
+    display: none !important;
+  }
+  .stat-cards {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  /* Services */
+  .svc-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Portfolio */
+  .port-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .port-grid .pi.tall {
+    height: 200px !important;
+  }
+  .port-grid .pi.norm {
+    height: 150px !important;
+  }
+
+  /* Booking */
+  .bk-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Contact */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Admin */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* General */
+  section {
+    padding: 48px 5% !important;
+  }
+  .cta-btns {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .port-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .stat-cards {
+    grid-template-columns: 1fr !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-btns {
+    flex-direction: column !important;
+  }
+  .hero-btns a, .hero-btns button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .booking-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
