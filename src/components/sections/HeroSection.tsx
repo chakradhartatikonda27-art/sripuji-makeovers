@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: 'easeOut' },
+  transition: { duration: 0.6, delay },
 })
 
 export default function HeroSection() {
@@ -38,7 +38,7 @@ export default function HeroSection() {
           <motion.div {...fade(0.22)} style={{ width: 36, height: 3, background: 'var(--coral)', borderRadius: 2, marginBottom: '18px' }} />
 
           <motion.p {...fade(0.28)} style={{ fontFamily: 'var(--font-playfair)', fontSize: 'clamp(17px,2.2vw,24px)', fontStyle: 'italic', color: 'var(--ink2)', lineHeight: 1.45, marginBottom: '14px' }}>
-            "Where every bride feels beautifully herself."
+            &quot;Where every bride feels beautifully herself.&quot;
           </motion.p>
 
           <motion.p {...fade(0.34)} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, maxWidth: '460px', marginBottom: '32px' }}>
@@ -46,10 +46,10 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.div {...fade(0.40)} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '40px' }}>
-            <Link href="/booking" style={{ background: 'var(--coral)', color: '#fff', padding: '13px 28px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.30)', display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' }}>
+            <Link href="/booking" style={{ background: 'var(--coral)', color: '#fff', padding: '13px 28px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.30)', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
               Book Appointment
             </Link>
-            <Link href="/services" style={{ background: '#fff', color: 'var(--coral)', padding: '12px 24px', borderRadius: '6px', border: '2px solid var(--blush3)', fontSize: '12px', fontWeight: 600, textDecoration: 'none', transition: 'all 0.2s' }}>
+            <Link href="/services" style={{ background: '#fff', color: 'var(--coral)', padding: '12px 24px', borderRadius: '6px', border: '2px solid var(--blush3)', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
               View Services
             </Link>
             <a href="https://wa.me/918885397517" target="_blank" rel="noopener" style={{ background: '#25D366', color: '#fff', padding: '12px 20px', borderRadius: '6px', fontSize: '12px', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 14px rgba(37,211,102,0.28)' }}>
