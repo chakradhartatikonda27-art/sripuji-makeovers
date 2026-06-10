@@ -56,7 +56,7 @@ export default function PortfolioGrid() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: i * 0.05 }}
-            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', height: (p.is_tall || p.tall) ? '320px' : '210px' }}
+            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', height: ((p as any).is_tall || (p as any).tall) ? '320px' : '210px' }}
             onMouseEnter={e => {
               const bg   = e.currentTarget.querySelector('.pi-bg') as HTMLElement
               const over = e.currentTarget.querySelector('.pi-over') as HTMLElement
@@ -73,24 +73,24 @@ export default function PortfolioGrid() {
               if (over) over.style.opacity = '0'
               if (lip) lip.style.opacity = '0.5'
             }}>
-            {p.image_url ? (
-              <img src={p.image_url} alt={p.label || p.category}
+            {(p as any).image_url ? (
+              <img src={(p as any).image_url} alt={(p as any).label || p.category}
                 className="pi-bg"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} />
             ) : (
               <div className="pi-bg" style={{ position: 'absolute', inset: 0, background: (p as any).bg || 'var(--blush)', transition: 'transform 0.5s' }} />
             )}
-            {!p.image_url && (
+            {!(p as any).image_url && (
               <div className="pi-lip" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-58%)', fontSize: '48px', opacity: 0.5, zIndex: 1, pointerEvents: 'none', transition: 'opacity 0.3s' }}>💄</div>
             )}
             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 14px', zIndex: 2, background: 'linear-gradient(to top,rgba(0,0,0,0.25) 0%,transparent 100%)' }}>
               <div style={{ fontFamily: 'var(--font-playfair)', fontSize: '16px', fontWeight: 400, fontStyle: 'italic', color: 'rgba(255,255,255,0.88)', lineHeight: 1.2, textShadow: '0 1px 8px rgba(0,0,0,0.2)' }}>
-                {p.label || p.category}
+                {(p as any).label || p.category}
               </div>
             </div>
             <div className="pi-over" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top,rgba(217,79,71,0.82) 0%,transparent 52%)', opacity: 0, transition: 'opacity 0.3s', zIndex: 3, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '16px 14px' }}>
               <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '2.5px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)', marginBottom: '3px' }}>{p.category}</div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', letterSpacing: '-0.2px' }}>{p.label || p.category}</div>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff', letterSpacing: '-0.2px' }}>{(p as any).label || p.category}</div>
             </div>
           </motion.div>
         ))}
