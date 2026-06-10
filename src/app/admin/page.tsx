@@ -10,12 +10,6 @@ const MN = ['January','February','March','April','May','June','July','August','S
 
 const STATUS_COLORS: Record<string,string> = { confirmed:'#EAF3DE', completed:'#D8F0E8', pending:'#FEF3D5', cancelled:'#FCEAEA' }
 const STATUS_TEXT:   Record<string,string> = { confirmed:'#2E5A0D', completed:'#0C5E42', pending:'#7A4A00', cancelled:'#882020' }
-const SLOT_COLORS:   Record<string,{bg:string;color:string;border:string}> = {
-  '🌅 Morning (6AM–11AM)':   {bg:'#FFFBEB',color:'#92400E',border:'#FDE68A'},
-  '☀️ Afternoon (11AM–3PM)': {bg:'#FFF7ED',color:'#C2410C',border:'#FED7AA'},
-  '🌆 Evening (3PM–7PM)':    {bg:'#FFF5F3',color:'#9A3412',border:'#FFCDC9'},
-  '🌙 Night (7PM–11PM)':     {bg:'#F5F3FF',color:'#6D28D9',border:'#DDD6FE'},
-}
 
 export default function AdminPage() {
   const router = useRouter()
@@ -253,11 +247,11 @@ export default function AdminPage() {
                     <div style={{fontSize:'15px',fontWeight:800,color:'var(--ink)',marginBottom:'4px'}}>
                       {new Date(selDate+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
                     </div>
-                    <div style={{fontSize:'12px',fontWeight:600,marginBottom:'10px',color:selBlocked?'#6B7280':selBks.length===0?'#15803D':selBks.length>=ALL_SLOTS.length?'#882020':'#92400E'}}>
+                    <div style={{fontSize:'12px',fontWeight:600,marginBottom:'10px',color:selBlocked?'#6B7280':selBks.length===0?'#15803D':selBks.length>=4?'#882020':'#92400E'}}>
                       {selBlocked?'⚫ Blocked — No bookings accepted':
                        selBks.length===0?'🟢 Fully Available — All 4 slots open':
-                       selBks.length>=ALL_SLOTS.length?'🔴 Fully Booked — All slots taken':
-                       `🟡 ${selBks.length} booked · ${ALL_SLOTS.length-selBks.length} slots still available`}
+                       selBks.length>=4?'🔴 Fully Booked — All slots taken':
+                       `🟡 ${selBks.length} booked · ${4-selBks.length} slots still available`}
                     </div>
                     {selBlocked ? (
                       <button onClick={()=>unblockDate(selDate)}
@@ -296,65 +290,34 @@ export default function AdminPage() {
                     <div style={{fontSize:'11px',color:'var(--muted2)'}}>No bookings are accepted on this date. Click "Unblock" above to open it.</div>
                   </div>
                 ) : (
-                  ALL_SLOTS.map(slot=>{
-                    const bk = selBks.find(b=>b.booking_time===slot)
-                    const sc = SLOT_COLORS[slot]||{bg:'#fff',color:'var(--muted)',border:'var(--border)'}
-                    if(bk){
-                      return (
-                        <div key={slot} style={{borderRadius:'12px',padding:'14px',marginBottom:'10px',background:sc.bg,border:`1.5px solid ${sc.border}`,transition:'all 0.2s'}}
-                          onMouseEnter={e=>e.currentTarget.style.borderColor='var(--coral)'}
-                          onMouseLeave={e=>e.currentTarget.style.borderColor=sc.border}>
-                          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'8px'}}>
-                            <div style={{fontSize:'11px',fontWeight:700,color:sc.color}}>{slot}</div>
-                            <span style={{padding:'2px 8px',borderRadius:'3px',fontSize:'8px',fontWeight:700,textTransform:'uppercase',background:STATUS_COLORS[bk.status],color:STATUS_TEXT[bk.status]}}>{bk.status}</span>
-                          </div>
-                          <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'2px'}}>{bk.name}</div>
-                          <div style={{fontSize:'12px',color:'var(--coral)',fontWeight:600,marginBottom:'2px'}}>{bk.service}</div>
-                          <div style={{fontSize:'11px',color:'var(--muted2)'}}>{bk.phone}</div>
-                          {bk.venue&&<div style={{fontSize:'10px',color:'var(--muted2)',marginTop:'2px'}}>📍 {bk.venue}</div>}
-                          {bk.notes&&<div style={{fontSize:'10px',color:'var(--muted2)',marginTop:'2px',fontStyle:'italic'}}>💬 {bk.notes}</div>}
-                          <div style={{display:'flex',gap:'6px',marginTop:'10px',flexWrap:'wrap'}}>
-                            {bk.status!=='completed'&&(
-                              <button onClick={()=>updateStatus(bk.id,'completed')}
-                                style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #BBF7D0',background:'#F0FDF4',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#15803D',transition:'all 0.2s'}}>
-                                ✓ Mark Done
-                              </button>
-                            )}
-                            <a href={`https://wa.me/${bk.phone.replace(/[^0-9]/g,'')}`} target="_blank" rel="noopener"
-                              style={{padding:'5px 12px',borderRadius:'6px',background:'#25D366',fontSize:'10px',fontWeight:700,textDecoration:'none',color:'#fff',display:'inline-flex',alignItems:'center',gap:'4px'}}>
-                              💬 WhatsApp
-                            </a>
-                            {bk.status!=='cancelled'&&(
-                              <button onClick={()=>updateStatus(bk.id,'cancelled')}
-                                style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #F5C1C1',background:'#FCEAEA',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#882020',transition:'all 0.2s'}}>
-                                ✗ Cancel
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    } else {
-                      return (
-                        <div key={slot} style={{borderRadius:'12px',padding:'12px 14px',marginBottom:'8px',background:'#F8FFF5',border:'1.5px solid #BBF7D0',display:'flex',justifyContent:'space-between',alignItems:'center',transition:'all 0.2s'}}
-                          onMouseEnter={e=>e.currentTarget.style.borderColor='#2E5A0D'}
-                          onMouseLeave={e=>e.currentTarget.style.borderColor='#BBF7D0'}>
-                          <div>
-                            <div style={{fontSize:'11px',fontWeight:700,color:'#6B7280',marginBottom:'2px'}}>{slot}</div>
-                            <div style={{fontSize:'13px',fontWeight:600,color:'#15803D'}}>🟢 Available</div>
-                          </div>
-                          <button onClick={async()=>{
-                            const res=await fetch('/api/bookings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'BLOCKED',phone:'0000000000',service:'Blocked Slot',service_price:0,booking_date:selDate,booking_time:slot,status:'cancelled',notes:'Admin blocked slot'})})
-                            if(res.ok){toast.success(`${slot} blocked`);load()}else toast.error('Failed')
-                          }}
-                            style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #D1D5DB',background:'#F9FAFB',fontSize:'10px',fontWeight:600,cursor:'pointer',color:'#6B7280',transition:'all 0.2s'}}
-                            onMouseEnter={e=>{e.currentTarget.style.borderColor='#882020';e.currentTarget.style.color='#882020';e.currentTarget.style.background='#FCEAEA'}}
-                            onMouseLeave={e=>{e.currentTarget.style.borderColor='#D1D5DB';e.currentTarget.style.color='#6B7280';e.currentTarget.style.background='#F9FAFB'}}>
-                            🔒 Block Slot
-                          </button>
-                        </div>
-                      )
-                    }
-                  })
+                  selBks.length === 0 ? (
+                  <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px',textAlign:'center'}}>
+                    <div style={{fontSize:'40px',marginBottom:'12px',opacity:0.4}}>🟢</div>
+                    <div style={{fontSize:'13px',fontWeight:600,color:'var(--ink)',marginBottom:'6px'}}>Fully Available</div>
+                    <div style={{fontSize:'11px',color:'var(--muted2)'}}>No bookings on this date</div>
+                  </div>
+                ) : (
+                  selBks.sort((a,b)=>a.booking_time.localeCompare(b.booking_time)).map(bk=>(
+                    <div key={bk.id} style={{borderRadius:'12px',padding:'14px',marginBottom:'10px',background:'var(--blush)',border:'1.5px solid var(--blush3)',transition:'all 0.2s'}}
+                      onMouseEnter={e=>e.currentTarget.style.borderColor='var(--coral)'}
+                      onMouseLeave={e=>e.currentTarget.style.borderColor='var(--blush3)'}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'8px'}}>
+                        <div style={{fontSize:'12px',fontWeight:700,color:'var(--coral)'}}>⏰ {bk.booking_time}</div>
+                        <span style={{padding:'2px 8px',borderRadius:'3px',fontSize:'8px',fontWeight:700,textTransform:'uppercase' as const,background:STATUS_COLORS[bk.status],color:STATUS_TEXT[bk.status]}}>{bk.status}</span>
+                      </div>
+                      <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'2px'}}>{bk.name}</div>
+                      <div style={{fontSize:'12px',color:'var(--coral)',fontWeight:600,marginBottom:'2px'}}>{bk.service}</div>
+                      <div style={{fontSize:'11px',color:'var(--muted2)'}}>{bk.phone}</div>
+                      {bk.venue&&<div style={{fontSize:'10px',color:'var(--muted2)',marginTop:'2px'}}>📍 {bk.venue}</div>}
+                      {bk.notes&&<div style={{fontSize:'10px',color:'var(--muted2)',marginTop:'2px',fontStyle:'italic'}}>💬 {bk.notes}</div>}
+                      <div style={{display:'flex',gap:'6px',marginTop:'10px',flexWrap:'wrap'}}>
+                        {bk.status!=='completed'&&(<button onClick={()=>updateStatus(bk.id,'completed')} style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #BBF7D0',background:'#F0FDF4',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#15803D'}}>✓ Mark Done</button>)}
+                        <a href={`https://wa.me/${bk.phone.replace(/[^0-9]/g,'')}`} target="_blank" rel="noopener" style={{padding:'5px 12px',borderRadius:'6px',background:'#25D366',fontSize:'10px',fontWeight:700,textDecoration:'none',color:'#fff',display:'inline-flex',alignItems:'center'}}>💬 WhatsApp</a>
+                        {bk.status!=='cancelled'&&(<button onClick={()=>updateStatus(bk.id,'cancelled')} style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #F5C1C1',background:'#FCEAEA',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#882020'}}>✗ Cancel</button>)}
+                      </div>
+                    </div>
+                  ))
+                )
                 )}
               </div>
             </div>
