@@ -5,38 +5,37 @@ import { useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { supabaseBrowser } from '@/lib/supabase'
-import { TIME_SLOTS, SLOT_LABELS, SLOT_COLORS } from '@/lib/constants'
 import type { Service } from '@/types'
 
 const schema = z.object({
-  name:       z.string().min(2, 'Please enter your full name'),
-  phone:      z.string().min(10, 'Please enter a valid phone number'),
-  email:      z.string().email().optional().or(z.literal('')),
-  service:    z.string().min(1, 'Please select a service'),
-  event_date: z.string().optional(),
-  venue:      z.string().optional(),
-  notes:      z.string().optional(),
+  name:         z.string().min(2, 'Please enter your full name'),
+  phone:        z.string().min(10, 'Please enter a valid phone number'),
+  email:        z.string().email().optional().or(z.literal('')),
+  service:      z.string().min(1, 'Please select a service'),
+  event_time:   z.string().min(1, 'Please enter your event time'),
+  event_date:   z.string().optional(),
+  venue:        z.string().optional(),
+  notes:        z.string().optional(),
 })
 type FormData = z.infer<typeof schema>
 
 const MN = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
 export default function BookingCalendar() {
-  const params = useSearchParams()
-  const [services, setServices]   = useState<Service[]>([])
-  const [blocked, setBlocked]     = useState<string[]>([])
-  const [bookedSlots, setBooked]  = useState<string[]>([])
-  const [calY, setCalY]           = useState(new Date().getFullYear())
-  const [calM, setCalM]           = useState(new Date().getMonth())
-  const [selDate, setSelDate]     = useState<string | null>(null)
-  const [selTime, setSelTime]     = useState<string | null>(null)
+  const params  = useSearchParams()
+  const [services, setServices] = useState<Service[]>([])
+  const [blocked, setBlocked]   = useState<string[]>([])
+  const [bookedDates, setBooked] = useState<string[]>([])
+  const [calY, setCalY]         = useState(new Date().getFullYear())
+  const [calM, setCalM]         = useState(new Date().getMonth())
+  const [selDate, setSelDate]   = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const [confirmed, setConfirmed] = useState<{ ref: string; name: string; service: string; date: string; time: string; phone: string } | null>(null)
+  const [confirmed, setConfirmed]   = useState<any>(null)
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+  const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: { service: params.get('service') || '' },
   })
@@ -47,16 +46,11 @@ export default function BookingCalendar() {
       .then(({ data }) => setServices(data || []))
     sb.from('blocked_dates').select('blocked_date')
       .then(({ data }) => setBlocked((data || []).map((d: any) => d.blocked_date)))
+    sb.from('bookings').select('booking_date').neq('status', 'cancelled')
+      .then(({ data }) => setBooked((data || []).map((d: any) => d.booking_date)))
   }, [])
 
-  useEffect(() => {
-    if (!selDate) return
-    fetch(`/api/bookings/slots?date=${selDate}`)
-      .then(r => r.json())
-      .then(d => setBooked(d.bookedSlots || []))
-  }, [selDate])
-
-  const today = new Date(); today.setHours(0,0,0,0)
+  const today       = new Date(); today.setHours(0, 0, 0, 0)
   const firstDay    = new Date(calY, calM, 1).getDay()
   const daysInMonth = new Date(calY, calM + 1, 0).getDate()
 
@@ -67,11 +61,8 @@ export default function BookingCalendar() {
     setCalM(m); setCalY(y)
   }
 
-  function pickDate(ds: string) { setSelDate(ds); setSelTime(null) }
-
   async function onSubmit(data: FormData) {
     if (!selDate) { toast.error('Please select a date'); return }
-    if (!selTime) { toast.error('Please select a time slot'); return }
     setSubmitting(true)
     try {
       const res = await fetch('/api/bookings', {
@@ -80,14 +71,14 @@ export default function BookingCalendar() {
         body: JSON.stringify({
           ...data,
           booking_date: selDate,
-          booking_time: selTime,
+          booking_time: data.event_time,
           service_price: services.find(s => s.name === data.service)?.price || 0,
         }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
-      setConfirmed({ ref: json.booking.booking_ref, name: data.name, service: data.service, date: selDate, time: selTime, phone: data.phone })
-      reset(); setSelDate(null); setSelTime(null)
+      setConfirmed({ ref: json.booking.booking_ref, name: data.name, service: data.service, date: selDate, time: data.event_time, phone: data.phone })
+      reset(); setSelDate(null)
     } catch (e: any) {
       toast.error(e.message || 'Booking failed')
     } finally {
@@ -105,8 +96,8 @@ export default function BookingCalendar() {
       <h2 style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '8px' }}>
         Booking <span style={{ color: 'var(--coral)' }}>Confirmed!</span>
       </h2>
-      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Saved successfully. Sri Pujitha will contact you shortly!</p>
-      <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '12px', padding: '16px', fontSize: '13px', color: '#993556', lineHeight: 2.1, textAlign: 'left', fontWeight: 500 }}>
+      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Sri Pujitha will contact you shortly to confirm!</p>
+      <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '12px', padding: '16px', fontSize: '13px', color: '#993556', lineHeight: 2.2, textAlign: 'left', fontWeight: 500 }}>
         <strong>{confirmed.name}</strong><br />
         📅 {confirmed.date}<br />
         ⏰ {confirmed.time}<br />
@@ -127,7 +118,7 @@ export default function BookingCalendar() {
       {/* Calendar */}
       <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', padding: '32px 28px' }}>
         <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--ink)', paddingBottom: '16px', borderBottom: '1px solid var(--border)', marginBottom: '22px' }}>
-          Step 1 — Choose Date
+          Step 1 — Choose Your Date
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
@@ -157,60 +148,58 @@ export default function BookingCalendar() {
             const isBlocked = blocked.includes(ds)
             const isToday   = dt.toDateString() === today.toDateString()
             const isSel     = ds === selDate
+            const bkCount   = bookedDates.filter(x => x === ds).length
             const disabled  = isPast || isBlocked
+
             return (
-              <div key={d} onClick={() => !disabled && pickDate(ds)}
+              <div key={d} onClick={() => !disabled && setSelDate(ds)}
                 style={{
-                  aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '11px', fontWeight: 500, borderRadius: '6px', cursor: disabled ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.15s', position: 'relative',
-                  background: isSel ? 'var(--coral)' : 'transparent',
-                  color: disabled ? 'var(--border2)' : isSel ? '#fff' : isToday ? 'var(--coral)' : 'var(--muted)',
+                  borderRadius: '8px', cursor: disabled ? 'not-allowed' : 'pointer',
+                  padding: '6px 2px', textAlign: 'center', transition: 'all 0.15s',
+                  minHeight: '56px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '3px',
+                  background: isSel ? 'var(--coral)' : isBlocked ? '#F3F4F6' : 'transparent',
+                  color: disabled ? 'var(--border2)' : isSel ? '#fff' : isToday ? 'var(--coral)' : 'var(--ink)',
                   outline: isToday && !isSel ? '2px solid var(--blush3)' : 'none',
-                  textDecoration: isBlocked ? 'line-through' : 'none',
-                  fontWeight: isSel || isToday ? 700 : 500,
+                  transform: isSel ? 'scale(1.08)' : 'scale(1)',
+                  boxShadow: isSel ? '0 4px 14px rgba(240,99,90,0.3)' : 'none',
                 }}
                 onMouseEnter={e => { if (!disabled && !isSel) { e.currentTarget.style.background = 'var(--blush)'; e.currentTarget.style.color = 'var(--coral)' }}}
-                onMouseLeave={e => { if (!disabled && !isSel) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = isToday ? 'var(--coral)' : 'var(--muted)' }}}>
-                {d}
+                onMouseLeave={e => { if (!disabled && !isSel) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = isToday ? 'var(--coral)' : 'var(--ink)' }}}>
+                <span style={{ fontSize: '13px', fontWeight: 700, lineHeight: 1 }}>{d}</span>
+                {!disabled && bkCount > 0 && (
+                  <span style={{ fontSize: '8px', fontWeight: 700, background: isSel ? 'rgba(255,255,255,0.25)' : 'var(--blush3)', color: isSel ? '#fff' : 'var(--coral)', borderRadius: '50px', padding: '1px 5px' }}>
+                    {bkCount} bk
+                  </span>
+                )}
+                {isBlocked && (
+                  <span style={{ fontSize: '8px', color: '#9CA3AF', fontWeight: 600 }}>blocked</span>
+                )}
               </div>
             )
           })}
         </div>
 
-        {/* Time blocks */}
-        <AnimatePresence>
-          {selDate && (
-            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ marginTop: '20px' }}>
-              <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted2)', marginBottom: '10px' }}>
-                Choose Time Block
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {TIME_SLOTS.map(slot => {
-                  const taken = bookedSlots.includes(slot)
-                  const sel   = slot === selTime
-                  const sc    = SLOT_COLORS[slot] || { bg: '#fff', color: 'var(--muted)', border: 'var(--border)' }
-                  return (
-                    <button key={slot} disabled={taken} onClick={() => setSelTime(slot)}
-                      style={{
-                        width: '100%', padding: '12px 16px', borderRadius: '8px', cursor: taken ? 'not-allowed' : 'pointer',
-                        border: `1.5px solid ${sel ? 'var(--coral)' : taken ? 'var(--border)' : sc.border}`,
-                        background: sel ? 'var(--coral)' : taken ? 'var(--bg)' : sc.bg,
-                        color: sel ? '#fff' : taken ? 'var(--border2)' : sc.color,
-                        textAlign: 'left', fontFamily: 'inherit', fontSize: '13px', fontWeight: 600,
-                        transition: 'all 0.2s', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                        textDecoration: taken ? 'line-through' : 'none',
-                      }}>
-                      <span>{slot}</span>
-                      {taken && <span style={{ fontSize: '10px', fontWeight: 700, opacity: 0.7 }}>BOOKED ✗</span>}
-                      {!taken && sel && <span style={{ fontSize: '10px', fontWeight: 700 }}>SELECTED ✓</span>}
-                    </button>
-                  )
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Legend */}
+        <div style={{ display: 'flex', gap: '16px', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--border)', flexWrap: 'wrap' }}>
+          {[
+            { color: 'var(--coral)', label: 'Selected date' },
+            { color: 'var(--blush3)', label: 'Has bookings' },
+            { color: '#D1D5DB', label: 'Blocked / Past' },
+          ].map(l => (
+            <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <div style={{ width: 10, height: 10, borderRadius: '3px', background: l.color, flexShrink: 0 }} />
+              <span style={{ fontSize: '10px', color: 'var(--muted2)' }}>{l.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Selected date confirmation */}
+        {selDate && (
+          <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+            style={{ marginTop: '16px', padding: '12px 14px', background: 'var(--blush)', border: '1.5px solid var(--blush3)', borderRadius: '10px', fontSize: '13px', fontWeight: 700, color: 'var(--coral)', textAlign: 'center' }}>
+            📅 {new Date(selDate + 'T00:00:00').toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </motion.div>
+        )}
       </div>
 
       {/* Form */}
@@ -218,13 +207,6 @@ export default function BookingCalendar() {
         <div style={{ fontSize: '14px', fontWeight: 700, color: 'var(--ink)', paddingBottom: '16px', borderBottom: '1px solid var(--border)', marginBottom: '22px' }}>
           Step 2 — Your Details
         </div>
-
-        {/* Summary */}
-        {selDate && selTime && (
-          <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '10px', padding: '12px 14px', marginBottom: '18px', fontSize: '12px', color: 'var(--coral)', fontWeight: 600 }}>
-            📅 {selDate} &nbsp;·&nbsp; ⏰ {selTime}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div style={{ marginBottom: '13px' }}>
@@ -238,7 +220,7 @@ export default function BookingCalendar() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '13px' }}>
             <div>
               <label style={lbl}>Phone *</label>
-              <input {...register('phone')} style={inp} placeholder="+91 88853 97517"
+              <input {...register('phone')} style={inp} placeholder="+91 98765 43210"
                 onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
               {errors.phone && <p style={{ fontSize: '11px', color: '#B02020', marginTop: '4px' }}>{errors.phone.message}</p>}
@@ -266,33 +248,52 @@ export default function BookingCalendar() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '13px' }}>
             <div>
+              <label style={lbl}>Event Time *</label>
+              <input {...register('event_time')} style={inp} placeholder="e.g. 8:00 AM or 7 PM"
+                onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
+                onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
+              {errors.event_time && <p style={{ fontSize: '11px', color: '#B02020', marginTop: '4px' }}>{errors.event_time.message}</p>}
+              <p style={{ fontSize: '10px', color: 'var(--muted2)', marginTop: '4px' }}>When do you need the artist?</p>
+            </div>
+            <div>
               <label style={lbl}>Event Date</label>
               <input {...register('event_date')} type="date" style={inp}
                 onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
                 onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
-            </div>
-            <div>
-              <label style={lbl}>Venue</label>
-              <input {...register('venue')} style={inp} placeholder="Hall / address"
-                onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
-                onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
+              <p style={{ fontSize: '10px', color: 'var(--muted2)', marginTop: '4px' }}>Actual event date (if different)</p>
             </div>
           </div>
 
           <div style={{ marginBottom: '13px' }}>
-            <label style={lbl}>Special Requirements</label>
-            <input {...register('notes')} style={inp} placeholder="Skin type, look preference, reference…"
+            <label style={lbl}>Venue / Location *</label>
+            <input {...register('venue')} style={inp} placeholder="Marriage hall name, address or area"
               onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
               onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
           </div>
 
-          <button type="submit" disabled={submitting || !selDate || !selTime}
-            style={{ width: '100%', padding: '13px', background: submitting || !selDate || !selTime ? 'var(--muted2)' : 'var(--coral)', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, border: 'none', cursor: submitting || !selDate || !selTime ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 18px rgba(240,99,90,0.28)' }}>
-            {submitting ? 'Confirming…' : !selDate ? 'Select a date first' : !selTime ? 'Select a time block' : 'Confirm Appointment'}
+          <div style={{ marginBottom: '13px' }}>
+            <label style={lbl}>Special Requirements</label>
+            <input {...register('notes')} style={inp} placeholder="Skin type, look preference, reference photos…"
+              onFocus={e => (e.target.style.borderColor = 'var(--coral)')}
+              onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
+          </div>
+
+          {/* Summary */}
+          {selDate && (
+            <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '10px', padding: '12px 14px', marginBottom: '14px', fontSize: '12px', color: 'var(--coral)', fontWeight: 600, lineHeight: 1.8 }}>
+              📅 Date: {selDate}<br />
+              ⏰ Time: {watch('event_time') || '—'}<br />
+              📍 Venue: {watch('venue') || '—'}
+            </div>
+          )}
+
+          <button type="submit" disabled={submitting || !selDate}
+            style={{ width: '100%', padding: '13px', background: submitting || !selDate ? 'var(--muted2)' : 'var(--coral)', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, border: 'none', cursor: submitting || !selDate ? 'not-allowed' : 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 18px rgba(240,99,90,0.28)' }}>
+            {submitting ? 'Confirming…' : !selDate ? 'Select a date first' : 'Confirm Appointment'}
           </button>
 
           <div style={{ marginTop: '12px', padding: '10px 13px', background: 'var(--blush)', borderLeft: '3px solid var(--blush3)', borderRadius: '0 7px 7px 0', fontSize: '10px', color: 'var(--coral)', lineHeight: 1.65, fontWeight: 600 }}>
-            📋 12% advance required · Trial makeup available · No refund on advance
+            📋 12% advance required · Trial makeup available · Sri Pujitha will confirm via WhatsApp
           </div>
         </form>
       </div>
