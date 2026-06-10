@@ -120,7 +120,19 @@ export default function ContentTab() {
                 {(settings.hero_brands||'').split(',').filter(Boolean).map(b=>(<span key={b} style={{padding:'3px 10px',background:'var(--blush)',border:'1px solid var(--blush3)',borderRadius:'50px',fontSize:'11px',fontWeight:600,color:'var(--coral)'}}>{b.trim()}</span>))}
               </div>
             </div>
-            {saveBtn(['hero_name','hero_title','hero_quote','hero_description','hero_availability','hero_brands'])}
+
+            <div style={{marginBottom:'12px'}}>
+              <label style={lbl}>Stats (4 boxes)</label>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'10px'}}>
+                {[1,2,3,4].map(n=>(
+                  <div key={n} style={{background:'var(--blush)',borderRadius:'8px',padding:'10px'}}>
+                    <input value={settings[`hero_stat${n}`]||''} onChange={e=>set(`hero_stat${n}`,e.target.value)} style={{...inp,marginBottom:'6px',padding:'7px 10px',fontSize:'12px'}} placeholder={`Stat ${n}`} onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+                    <input value={settings[`hero_stat${n}_lbl`]||''} onChange={e=>set(`hero_stat${n}_lbl`,e.target.value)} style={{...inp,padding:'7px 10px',fontSize:'11px'}} placeholder="Label" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {saveBtn(['hero_name','hero_title','hero_quote','hero_description','hero_availability','hero_brands','hero_stat1','hero_stat1_lbl','hero_stat2','hero_stat2_lbl','hero_stat3','hero_stat3_lbl','hero_stat4','hero_stat4_lbl'])}
           </div>
         </>
       )}

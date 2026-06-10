@@ -17,6 +17,10 @@ export default function HeroSection() {
     about_stat3:      '11+',  about_stat3_lbl: 'Services',
     about_stat4:      '100%', about_stat4_lbl: 'Premium Products',
     about_photo_url:  '',
+    hero_stat1: '500+', hero_stat1_lbl: 'Brides Transformed',
+    hero_stat2: '11+',  hero_stat2_lbl: 'Services',
+    hero_stat3: '100%', hero_stat3_lbl: 'Premium Kit',
+    hero_stat4: '✈️',   hero_stat4_lbl: 'Travels to Venue',
     contact_whatsapp: '918885397517',
   })
 
@@ -31,10 +35,10 @@ export default function HeroSection() {
   const extraCount = brands.length - 5
 
   const stats = [
-    { n: s.about_stat1, l: s.about_stat1_lbl },
-    { n: s.about_stat3, l: s.about_stat3_lbl },
-    { n: s.about_stat4, l: s.about_stat4_lbl },
-    { n: '✈️', l: 'Travels to Venue' },
+    { n: s.hero_stat1 || s.about_stat1 || '500+', l: s.hero_stat1_lbl || s.about_stat1_lbl || 'Brides Transformed' },
+    { n: s.hero_stat2 || s.about_stat3 || '11+',  l: s.hero_stat2_lbl || s.about_stat3_lbl || 'Services' },
+    { n: s.hero_stat3 || s.about_stat4 || '100%', l: s.hero_stat3_lbl || s.about_stat4_lbl || 'Premium Kit' },
+    { n: s.hero_stat4 || '✈️', l: s.hero_stat4_lbl || 'Travels to Venue' },
   ]
 
   return (
