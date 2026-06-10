@@ -40,7 +40,7 @@ export default function HeroSection() {
   ]
 
   return (
-    <section style={{ background: '#fff', padding: isMobile ? '48px 5% 40px' : '80px 6% 64px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }}>
+    <section style={{ background: '#fff', padding: isMobile ? '32px 5% 40px' : '80px 6% 64px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '36px' : '64px', alignItems: 'center' }}>
 
         {/* Left */}
@@ -63,17 +63,17 @@ export default function HeroSection() {
           </p>
 
           {/* Buttons */}
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', gap: '10px', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap', marginBottom: '32px' }}>
             <Link href="/booking"
-              style={{ padding: '13px 24px', background: 'var(--coral)', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.35)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center' }}>
+              style={{ padding: '13px 24px', background: 'var(--coral)', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.35)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center', width: isMobile ? '100%' : 'auto' }}>
               Book Appointment
             </Link>
             <Link href="/services"
-              style={{ padding: '13px 24px', background: 'transparent', color: 'var(--ink)', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: '1.5px solid var(--border)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center' }}>
+              style={{ padding: '13px 24px', background: 'transparent', color: 'var(--ink)', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: '1.5px solid var(--border)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center', width: isMobile ? '100%' : 'auto' }}>
               View Services
             </Link>
             <a href={`https://wa.me/${s.contact_whatsapp}`} target="_blank" rel="noopener"
-              style={{ padding: '13px 24px', background: '#25D366', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              style={{ padding: '13px 24px', background: '#25D366', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: isMobile ? '100%' : 'auto' }}>
               💬 WhatsApp
             </a>
           </div>
