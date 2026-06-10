@@ -1,35 +1,59 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { TESTIMONIALS } from '@/lib/constants'
 
+interface Testimonial {
+  id?: string
+  author: string
+  event: string
+  text: string
+  rating: number
+}
+
 export default function TestimonialsSection() {
+  const [items, setItems] = useState<Testimonial[]>(TESTIMONIALS)
+
+  useEffect(() => {
+    fetch('/api/testimonials')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setItems(data.filter((t: any) => t.is_active !== false))
+        }
+      })
+      .catch(() => {})
+  }, [])
+
   return (
-    <section id="reviews" style={{ background: 'var(--blush)', padding: '96px 6%' }}>
+    <section id="reviews" style={{ background: 'var(--bg)', padding: '80px 6%', borderBottom: '1px solid var(--border)' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <div className="eyebrow-dash center">Client Reviews</div>
-          <h2 style={{ fontSize: 'clamp(26px,3.8vw,42px)', fontWeight: 800, letterSpacing: '-1px', color: 'var(--ink)', marginBottom: '12px' }}>
-            What Our <span style={{ color: 'var(--coral)' }}>Brides Say</span>
+          <div className="eyebrow-dash" style={{ justifyContent: 'center' }}>Reviews</div>
+          <h2 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 800, letterSpacing: '-1px', color: 'var(--ink)', lineHeight: 1.1 }}>
+            What Brides <span style={{ fontFamily: 'var(--font-playfair)', fontStyle: 'italic', color: 'var(--coral)', fontWeight: 600 }}>Are Saying</span>
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, maxWidth: '500px', margin: '0 auto' }}>
-            Real feedback from real clients who trusted us with their most important day.
-          </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: '16px' }}>
-          {TESTIMONIALS.map((t, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
-              style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', padding: '28px 24px', transition: 'all 0.25s' }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(240,99,90,0.12)'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = 'var(--blush3)' }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'var(--border)' }}>
-              <div style={{ color: 'var(--coral)', fontSize: '12px', letterSpacing: '2px', marginBottom: '12px' }}>{'★'.repeat(t.rating)}</div>
-              <p style={{ fontFamily: 'var(--font-playfair)', fontSize: '15px', fontStyle: 'italic', lineHeight: 1.8, color: 'var(--ink2)', marginBottom: '16px' }}>"{t.text}"</p>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--coral)' }}>{t.author}</div>
-              <div style={{ fontSize: '10px', color: 'var(--muted2)', marginTop: '2px', fontWeight: 500 }}>{t.event}</div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
+          {items.map((t, i) => (
+            <motion.div key={t.id || i}
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}
+              style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '2px' }}>
+                {Array.from({ length: t.rating || 5 }).map((_, j) => (
+                  <span key={j} style={{ fontSize: '14px' }}>⭐</span>
+                ))}
+              </div>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, fontStyle: 'italic', flex: 1 }}>
+                "{t.text}"
+              </p>
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--ink)' }}>{t.author}</div>
+                <div style={{ fontSize: '11px', color: 'var(--muted2)', marginTop: '2px' }}>{t.event}</div>
+              </div>
             </motion.div>
           ))}
         </div>

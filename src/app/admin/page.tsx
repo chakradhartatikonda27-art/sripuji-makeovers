@@ -1,4 +1,5 @@
 'use client'
+import ContentTab from '@/components/admin/ContentTab'
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
@@ -131,6 +132,7 @@ export default function AdminPage() {
             <button style={tabStyle(tab==='calendar')} onClick={()=>setTab('calendar')}>📅 Calendar</button>
             <button style={tabStyle(tab==='bookings')} onClick={()=>setTab('bookings')}>📋 All Bookings</button>
             <button style={tabStyle(tab==='analytics')} onClick={()=>setTab('analytics')}>📈 Analytics</button>
+            <button style={tabStyle(tab==='content' as any)} onClick={()=>setTab('content' as any)}>✏️ Content</button>
           </div>
         </div>
       </div>
@@ -374,6 +376,8 @@ export default function AdminPage() {
             </div>
           </>
         )}
+
+        {tab === ('content' as any) && <ContentTab />}
 
         {/* ── ANALYTICS TAB ── */}
         {tab==='analytics' && analytics && (
