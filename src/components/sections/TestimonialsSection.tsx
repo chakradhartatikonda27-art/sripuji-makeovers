@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { TESTIMONIALS } from '@/lib/constants'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+
 
 interface Testimonial {
   id?: string
@@ -14,7 +14,7 @@ interface Testimonial {
 }
 
 export default function TestimonialsSection() {
-  const { isMobile, isTablet } = useBreakpoint()
+  
   const [items, setItems] = useState<Testimonial[]>(TESTIMONIALS)
 
   useEffect(() => {

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+
 
 export default function AboutSection() {
-  const { isMobile } = useBreakpoint()
+  
   const [s, setS] = useState<Record<string, string>>({
     about_bio:       'Hi, I\'m Sri Pujitha — a freelance makeup artist based in Rajahmundry. Since founding Sripuji Makeovers in 2023, I\'ve dedicated myself to creating personalised, stunning looks that celebrate every bride\'s unique beauty.',
     about_stat1:     '500+', about_stat1_lbl: 'Brides Transformed',
@@ -25,12 +25,12 @@ export default function AboutSection() {
   const tags = (s.about_tags || '').split(',').filter(Boolean).map(t => t.trim())
 
   return (
-    <section id="about" style={{ background: '#fff', padding: isMobile ? '52px 5%' : '80px 6%', borderBottom: '1px solid var(--border)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '36px' : '64px', alignItems: 'center' }}>
+    <section id="about" style={{ background: '#fff', padding: '80px 6%', borderBottom: '1px solid var(--border)' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }}>
 
         {/* Photo */}
         <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <div style={{ borderRadius: '20px', overflow: 'hidden', aspectRatio: isMobile ? '4/3' : '3/4', background: 'linear-gradient(155deg, var(--coral) 0%, var(--blush3) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ borderRadius: '20px', overflow: 'hidden', aspectRatio: '3/4', background: 'linear-gradient(155deg, var(--coral) 0%, var(--blush3) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
             {s.about_photo_url ? (
               <img src={s.about_photo_url} alt="Sri Pujitha" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
@@ -53,7 +53,7 @@ export default function AboutSection() {
         </motion.div>
 
         {/* Content */}
-        <motion.div initial={{ opacity: 0, x: isMobile ? 0 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}>
+        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}>
           <div className="eyebrow-dash">About Me</div>
           <h2 style={{ fontSize: 'clamp(26px,4vw,44px)', fontWeight: 800, letterSpacing: '-1px', color: 'var(--ink)', lineHeight: 1.1, marginBottom: '18px' }}>
             Passion for Beauty,<br />

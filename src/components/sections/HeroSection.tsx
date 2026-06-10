@@ -3,10 +3,8 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 export default function HeroSection() {
-  const { isMobile, isTablet } = useBreakpoint()
   const [s, setS] = useState<Record<string, string>>({
     hero_name:        'Sri Pujitha',
     hero_title:       'Makeup Artist',
@@ -29,7 +27,7 @@ export default function HeroSection() {
   }, [])
 
   const brands = (s.hero_brands || '').split(',').filter(Boolean).map(b => b.trim())
-  const visibleBrands = brands.slice(0, isMobile ? 3 : 5)
+  const visibleBrands = brands.slice(0, 5)
   const extraCount = brands.length - visibleBrands.length
 
   const stats = [
@@ -40,18 +38,18 @@ export default function HeroSection() {
   ]
 
   return (
-    <section style={{ background: '#fff', padding: isMobile ? '32px 5% 40px' : '80px 6% 64px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '36px' : '64px', alignItems: 'center' }}>
+    <section className="section-pad" style={{ background: '#fff', padding: '80px 6% 64px', borderBottom: '1px solid var(--border)', overflow: 'hidden' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }}>
 
         {/* Left */}
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '4px', textTransform: 'uppercase', color: 'var(--coral)', marginBottom: '14px' }}>
             Sripuji Makeovers
           </div>
-          <h1 style={{ fontSize: isMobile ? '52px' : 'clamp(40px,6vw,72px)', fontWeight: 800, letterSpacing: '-2px', color: 'var(--ink)', lineHeight: 1, marginBottom: '4px' }}>
+          <h1 style={{ fontSize: clamp(40px,6vw,72px), fontWeight: 800, letterSpacing: '-2px', color: 'var(--ink)', lineHeight: 1, marginBottom: '4px' }}>
             {s.hero_name}
           </h1>
-          <h2 style={{ fontSize: isMobile ? '48px' : 'clamp(36px,5.5vw,66px)', fontWeight: 800, letterSpacing: '-2px', color: 'var(--coral)', lineHeight: 1, marginBottom: '18px' }}>
+          <h2 style={{ fontSize: clamp(36px,5.5vw,66px), fontWeight: 800, letterSpacing: '-2px', color: 'var(--coral)', lineHeight: 1, marginBottom: '18px' }}>
             {s.hero_title}
           </h2>
           <div style={{ width: '40px', height: '3px', background: 'var(--coral)', borderRadius: '2px', marginBottom: '18px' }} />
@@ -63,17 +61,17 @@ export default function HeroSection() {
           </p>
 
           {/* Buttons */}
-          <div style={{ display: 'flex', gap: '10px', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap', marginBottom: '32px' }}>
+          <div style={{ display: 'flex', gap: '10px', flexDirection: 'row', flexWrap: 'wrap', marginBottom: '32px' }}>
             <Link href="/booking"
-              style={{ padding: '13px 24px', background: 'var(--coral)', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.35)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center', width: isMobile ? '100%' : 'auto' }}>
+              style={{ padding: '13px 24px', background: 'var(--coral)', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 20px rgba(240,99,90,0.35)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center' }}>
               Book Appointment
             </Link>
             <Link href="/services"
-              style={{ padding: '13px 24px', background: 'transparent', color: 'var(--ink)', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: '1.5px solid var(--border)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center', width: isMobile ? '100%' : 'auto' }}>
+              style={{ padding: '13px 24px', background: 'transparent', color: 'var(--ink)', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', border: '1.5px solid var(--border)', transition: 'all 0.2s', display: 'inline-block', textAlign: 'center' }}>
               View Services
             </Link>
             <a href={`https://wa.me/${s.contact_whatsapp}`} target="_blank" rel="noopener"
-              style={{ padding: '13px 24px', background: '#25D366', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', width: isMobile ? '100%' : 'auto' }}>
+              style={{ padding: '13px 24px', background: '#25D366', color: '#fff', borderRadius: '50px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
               💬 WhatsApp
             </a>
           </div>
@@ -82,7 +80,7 @@ export default function HeroSection() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px' }}>
             {stats.map(k => (
               <div key={k.l} style={{ textAlign: 'center', padding: '10px 6px', background: 'var(--blush)', borderRadius: '10px', border: '1px solid var(--blush3)' }}>
-                <div style={{ fontSize: isMobile ? '18px' : '20px', fontWeight: 800, color: 'var(--coral)', letterSpacing: '-0.5px', lineHeight: 1 }}>{k.n}</div>
+                <div style={{ fontSize: '20px', fontWeight: 800, color: 'var(--coral)', letterSpacing: '-0.5px', lineHeight: 1 }}>{k.n}</div>
                 <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted2)', marginTop: '4px', lineHeight: 1.3 }}>{k.l}</div>
               </div>
             ))}
@@ -90,8 +88,7 @@ export default function HeroSection() {
         </motion.div>
 
         {/* Right card — hide on mobile */}
-        {!isMobile && (
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
+        <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
             <div style={{ background: 'linear-gradient(155deg, var(--blush) 0%, #fff 100%)', borderRadius: '24px', padding: '28px', border: '1px solid var(--blush3)', boxShadow: '0 20px 60px rgba(240,99,90,0.12)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px', padding: '14px', background: '#fff', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
                 <div style={{ width: 52, height: 52, borderRadius: '10px', overflow: 'hidden', background: 'var(--blush3)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -123,7 +120,6 @@ export default function HeroSection() {
               </div>
             </div>
           </motion.div>
-        )}
       </div>
     </section>
   )

@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { supabaseBrowser } from '@/lib/supabase'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+
 import type { Service } from '@/types'
 
 const schema = z.object({
@@ -26,7 +26,7 @@ type FormData = z.infer<typeof schema>
 const MN = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
 export default function BookingCalendar() {
-  const { isMobile } = useBreakpoint()
+  
   const params  = useSearchParams()
   const [services, setServices] = useState<Service[]>([])
   const [blocked, setBlocked]   = useState<string[]>([])
@@ -115,7 +115,7 @@ export default function BookingCalendar() {
   )
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.1fr', gap: isMobile ? '16px' : '24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="booking-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '24px', maxWidth: '1200px', margin: '0 auto' }}>
 
       {/* Calendar */}
       <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', padding: '32px 28px' }}>

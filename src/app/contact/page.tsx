@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import { useBreakpoint } from '@/hooks/useBreakpoint'
+
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 
@@ -20,7 +20,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export default function ContactPage() {
-  const { isMobile } = useBreakpoint()
+  
   const [settings, setSettings] = useState<Record<string, string>>({
     contact_phone:    '+91 88853 97517',
     contact_email:    'sripujimakeovers@gmail.com',
@@ -77,7 +77,7 @@ export default function ContactPage() {
         </section>
 
         <section style={{ padding: '48px 6%', background: 'var(--bg)' }}>
-          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1.4fr', gap: isMobile ? '20px' : '32px' }}>
+          <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: '32px' }}>
 
             {/* Contact info */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

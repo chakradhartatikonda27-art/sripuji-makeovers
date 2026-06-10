@@ -214,3 +214,90 @@ body { font-family: var(--font-inter), Inter, system-ui, sans-serif; background:
   .footer-grid { grid-template-columns: 1fr !important; }
   .admin-kpis { grid-template-columns: repeat(2,1fr) !important; }
 }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 767px) {
+  /* Hero */
+  .hero-section-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .hero-right-card { display: none !important; }
+  .hero-buttons {
+    flex-direction: column !important;
+  }
+  .hero-buttons a, .hero-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .hero-stats {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+
+  /* About */
+  .about-section-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .about-float-badge { display: none !important; }
+
+  /* Booking */
+  .booking-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Portfolio */
+  .portfolio-items-grid {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  .portfolio-items-grid > div {
+    height: 160px !important;
+  }
+
+  /* Testimonials */
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Footer */
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  /* Contact */
+  .contact-info-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Admin */
+  .admin-kpis-grid {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  .admin-calendar-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* General padding */
+  .section-pad {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet */
+  .hero-section-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+  .testimonials-grid {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
