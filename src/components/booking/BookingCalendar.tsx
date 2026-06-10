@@ -297,7 +297,7 @@ export default function BookingCalendar() {
           </button>
 
           <div style={{ marginTop: '12px', padding: '10px 13px', background: 'var(--blush)', borderLeft: '3px solid var(--blush3)', borderRadius: '0 7px 7px 0', fontSize: '10px', color: 'var(--coral)', lineHeight: 1.65, fontWeight: 600 }}>
-            📋 12% advance required · Trial makeup available · Sri Pujitha will confirm via WhatsApp
+            📋 Sri Pujitha will confirm your appointment via WhatsApp
           </div>
         </form>
       </div>
