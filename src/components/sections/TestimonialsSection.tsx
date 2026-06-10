@@ -38,7 +38,7 @@ export default function TestimonialsSection() {
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px' }}>
           {items.map((t, i) => (
             <motion.div key={t.id || i}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}

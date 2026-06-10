@@ -115,7 +115,7 @@ export default function BookingCalendar() {
   )
 
   return (
-    <div className="booking-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div className="booking-grid" style={{ display: 'grid', maxWidth: '1200px', margin: '0 auto' }}>
 
       {/* Calendar */}
       <div style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', padding: '32px 28px' }}>

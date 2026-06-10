@@ -63,6 +63,29 @@ body { font-family: var(--font-inter), Inter, system-ui, sans-serif; background:
   50%       { opacity: 0.4; transform: scale(0.8); }
 }
 
+
+/* ── GRID DEFAULTS (desktop) ── */
+.hero-section-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  gap: 40px;
+}
+.about-section-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  gap: 40px;
+}
+.booking-grid {
+  grid-template-columns: 1fr 1.1fr;
+  gap: 24px;
+}
+.testimonials-grid {
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+}
+.footer-grid {
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: 40px;
+}
+
 /* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
 
@@ -214,81 +237,59 @@ body { font-family: var(--font-inter), Inter, system-ui, sans-serif; background:
   .footer-grid { grid-template-columns: 1fr !important; }
   .admin-kpis { grid-template-columns: repeat(2,1fr) !important; }
 }
-
-/* ── MOBILE RESPONSIVE ── */
+/* ── RESPONSIVE GRIDS ── */
 @media (max-width: 767px) {
-  /* Hero */
   .hero-section-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
-  .hero-right-card { display: none !important; }
+  .hero-right-card {
+    display: none !important;
+  }
   .hero-buttons {
     flex-direction: column !important;
   }
-  .hero-buttons a, .hero-buttons button {
+  .hero-buttons a {
     width: 100% !important;
-    justify-content: center !important;
     text-align: center !important;
+    justify-content: center !important;
   }
   .hero-stats {
     grid-template-columns: repeat(2,1fr) !important;
   }
-
-  /* About */
   .about-section-grid {
     grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
-  .about-float-badge { display: none !important; }
-
-  /* Booking */
+  .about-float-badge {
+    display: none !important;
+  }
   .booking-grid {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
   }
-
-  /* Portfolio */
-  .portfolio-items-grid {
-    grid-template-columns: repeat(2,1fr) !important;
-  }
-  .portfolio-items-grid > div {
-    height: 160px !important;
-  }
-
-  /* Testimonials */
   .testimonials-grid {
     grid-template-columns: 1fr !important;
   }
-
-  /* Footer */
   .footer-grid {
     grid-template-columns: 1fr !important;
     gap: 28px !important;
   }
-
-  /* Contact */
   .contact-info-grid {
     grid-template-columns: 1fr !important;
   }
-
-  /* Admin */
   .admin-kpis-grid {
     grid-template-columns: repeat(2,1fr) !important;
   }
   .admin-calendar-grid {
     grid-template-columns: 1fr !important;
   }
-
-  /* General padding */
-  .section-pad {
-    padding-left: 5% !important;
-    padding-right: 5% !important;
+  .portfolio-items-grid > div {
+    height: 160px !important;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Tablet */
   .hero-section-grid {
     grid-template-columns: 1fr 1fr !important;
     gap: 32px !important;
