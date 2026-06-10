@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import type { Booking } from '@/types'
 
 const MN = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const ALL_SLOTS = ['8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM']
+const ALL_SLOTS = ['🌅 Morning (6AM–11AM)','☀️ Afternoon (11AM–3PM)','🌆 Evening (3PM–7PM)','🌙 Night (7PM–11PM)']
 
 const STATUS_COLORS: Record<string, string> = {
   confirmed: '#EAF3DE', completed: '#D8F0E8',

@@ -14,10 +14,25 @@ export const SITE = {
 }
 
 export const TIME_SLOTS = [
-  '8:00 AM','9:00 AM','10:00 AM','11:00 AM',
-  '12:00 PM','1:00 PM','2:00 PM','3:00 PM',
-  '4:00 PM','5:00 PM','6:00 PM','7:00 PM',
+  '🌅 Morning (6AM–11AM)',
+  '☀️ Afternoon (11AM–3PM)',
+  '🌆 Evening (3PM–7PM)',
+  '🌙 Night (7PM–11PM)',
 ]
+
+export const SLOT_LABELS: Record<string, string> = {
+  '🌅 Morning (6AM–11AM)':   'Morning · 6:00 AM – 11:00 AM',
+  '☀️ Afternoon (11AM–3PM)': 'Afternoon · 11:00 AM – 3:00 PM',
+  '🌆 Evening (3PM–7PM)':    'Evening · 3:00 PM – 7:00 PM',
+  '🌙 Night (7PM–11PM)':     'Night · 7:00 PM – 11:00 PM',
+}
+
+export const SLOT_COLORS: Record<string, { bg: string; color: string; border: string }> = {
+  '🌅 Morning (6AM–11AM)':   { bg: '#FFFBEB', color: '#92400E', border: '#FDE68A' },
+  '☀️ Afternoon (11AM–3PM)': { bg: '#FFF7ED', color: '#C2410C', border: '#FED7AA' },
+  '🌆 Evening (3PM–7PM)':    { bg: '#FFF5F3', color: '#9A3412', border: '#FFCDC9' },
+  '🌙 Night (7PM–11PM)':     { bg: '#F5F3FF', color: '#6D28D9', border: '#DDD6FE' },
+}
 
 export const BRANDS = [
   'NARS','Huda Beauty','Tarte','Laura Mercier','Inglot',
