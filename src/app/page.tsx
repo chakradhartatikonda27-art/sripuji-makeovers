@@ -7,6 +7,7 @@ import AboutSection from '@/components/sections/AboutSection'
 import ServicesGrid from '@/components/sections/ServicesGrid'
 import BrandsSection from '@/components/sections/BrandsSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
+import LocationSection from '@/components/sections/LocationSection'
 
 export default function HomePage() {
   return (
@@ -37,6 +38,7 @@ export default function HomePage() {
         </section>
         <BrandsSection />
         <TestimonialsSection />
+        <LocationSection />
         <section style={{ background: 'var(--coral)', padding: '80px 6%', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(22px,3.5vw,38px)', fontWeight: 800, color: '#fff', letterSpacing: '-1px', marginBottom: '14px' }}>
             Ready to Look Stunning on Your Special Day?
