@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { supabaseBrowser } from '@/lib/supabase'
+import { useMobile } from '@/context/MobileContext'
 
 import type { Service } from '@/types'
 
@@ -27,6 +28,7 @@ const MN = ['January','February','March','April','May','June','July','August','S
 
 export default function BookingCalendar() {
   
+  const { isMobile } = useMobile()
   const params  = useSearchParams()
   const [services, setServices] = useState<Service[]>([])
   const [blocked, setBlocked]   = useState<string[]>([])

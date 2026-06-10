@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useMobile } from '@/context/MobileContext'
 
 import Link from 'next/link'
 import { NAV_LINKS, SITE } from '@/lib/constants'
 
 export default function Footer() {
+  const { isMobile, isTablet } = useMobile()
   
   const [s, setS] = useState({
     contact_phone:   SITE.phoneDisplay,
@@ -23,7 +25,7 @@ export default function Footer() {
   return (
     <footer style={{ background: '#111', color: 'rgba(255,255,255,0.6)', padding: '56px 6% 32px', fontFamily: 'var(--font-inter)' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1.2fr', gap: '40px', marginBottom: '48px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : '1.5fr 1fr 1fr 1.2fr', gap: isMobile ? '28px' : '40px', marginBottom: '48px' }}>
 
           {/* Brand */}
           <div>
