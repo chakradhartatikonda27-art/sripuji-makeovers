@@ -15,7 +15,7 @@ interface Testimonial {
 export default function ContentTab() {
   const [settings, setSettings]   = useState<Record<string, string>>({})
   const [tests, setTests]         = useState<Testimonial[]>([])
-  const [section, setSection]     = useState<'about'|'services'|'reviews'|'contact'>('about')
+  const [section, setSection]     = useState<'hero'|'about'|'services'|'reviews'|'contact'>('hero')
   const [saving, setSaving]       = useState(false)
   const [uploading, setUploading] = useState(false)
   const [newTest, setNewTest]     = useState({ author:'', event:'', text:'', rating:5 })
@@ -80,12 +80,51 @@ export default function ContentTab() {
   return (
     <div>
       <div style={{display:'flex',gap:'8px',flexWrap:'wrap',marginBottom:'20px'}}>
-        {(['about','services','reviews','contact'] as const).map(id=>(
+        {(['hero','about','services','reviews','contact'] as const).map(id=>(
           <button key={id} onClick={()=>setSection(id)} style={secStyle(section===id)}>
-            {id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':'📞 Contact'}
+            {id==='hero'?'🏠 Hero':id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':'📞 Contact'}
           </button>
         ))}
       </div>
+
+      {section==='hero' && (
+        <>
+          <div style={card}>
+            <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>🏠 Hero Section</div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',marginBottom:'12px'}}>
+              <div>
+                <label style={lbl}>Artist Name</label>
+                <input value={settings.hero_name||''} onChange={e=>set('hero_name',e.target.value)} style={inp} placeholder="Sri Pujitha" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+              <div>
+                <label style={lbl}>Title / Profession</label>
+                <input value={settings.hero_title||''} onChange={e=>set('hero_title',e.target.value)} style={inp} placeholder="Makeup Artist" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              </div>
+            </div>
+            <div style={{marginBottom:'12px'}}>
+              <label style={lbl}>Hero Quote</label>
+              <input value={settings.hero_quote||''} onChange={e=>set('hero_quote',e.target.value)} style={inp} placeholder="Where every bride feels beautifully herself." onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+            </div>
+            <div style={{marginBottom:'12px'}}>
+              <label style={lbl}>Description</label>
+              <textarea value={settings.hero_description||''} onChange={e=>set('hero_description',e.target.value)} rows={3} style={{...inp,resize:'vertical' as const}} onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+            </div>
+            <div style={{marginBottom:'12px'}}>
+              <label style={lbl}>Availability Text</label>
+              <input value={settings.hero_availability||''} onChange={e=>set('hero_availability',e.target.value)} style={inp} placeholder="Rajahmundry & East Godavari" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+            </div>
+            <div style={{marginBottom:'12px'}}>
+              <label style={lbl}>Brands (comma separated)</label>
+              <input value={settings.hero_brands||''} onChange={e=>set('hero_brands',e.target.value)} style={inp} placeholder="NARS, Huda Beauty, MAC…" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+              <div style={{display:'flex',flexWrap:'wrap',gap:'6px',marginTop:'8px'}}>
+                {(settings.hero_brands||'').split(',').filter(Boolean).map(b=>(<span key={b} style={{padding:'3px 10px',background:'var(--blush)',border:'1px solid var(--blush3)',borderRadius:'50px',fontSize:'11px',fontWeight:600,color:'var(--coral)'}}>{b.trim()}</span>))}
+              </div>
+            </div>
+            {saveBtn(['hero_name','hero_title','hero_quote','hero_description','hero_availability','hero_brands'])}
+          </div>
+        </>
+      )}
+
 
       {section==='about' && (
         <>
