@@ -2,6 +2,7 @@
 import ContentTab from '@/components/admin/ContentTab'
 
 import { useEffect, useState, useCallback } from 'react'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import type { Booking } from '@/types'
@@ -13,6 +14,7 @@ const STATUS_COLORS: Record<string,string> = { confirmed:'#EAF3DE', completed:'#
 const STATUS_TEXT:   Record<string,string> = { confirmed:'#2E5A0D', completed:'#0C5E42', pending:'#7A4A00', cancelled:'#882020' }
 
 export default function AdminPage() {
+  const { isMobile } = useBreakpoint()
   const router = useRouter()
   const [tab, setTab]           = useState<'calendar'|'bookings'|'analytics'>('calendar')
   const [all, setAll]           = useState<Booking[]>([])

@@ -167,3 +167,50 @@ body { font-family: var(--font-inter), Inter, system-ui, sans-serif; background:
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ── RESPONSIVE BREAKPOINTS ── */
+@media (max-width: 768px) {
+
+  /* Hero */
+  .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .hero-card { display: none !important; }
+  .hero-stats { grid-template-columns: repeat(2,1fr) !important; }
+  .hero-btns { flex-direction: column !important; }
+  .hero-btns a { text-align: center !important; }
+
+  /* About */
+  .about-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .about-stats { grid-template-columns: repeat(3,1fr) !important; }
+
+  /* Booking calendar */
+  .booking-grid { grid-template-columns: 1fr !important; }
+
+  /* Portfolio */
+  .portfolio-grid { grid-template-columns: repeat(2,1fr) !important; }
+  .portfolio-item { height: 160px !important; }
+
+  /* Services */
+  .services-grid { grid-template-columns: 1fr !important; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+
+  /* Contact */
+  .contact-grid { grid-template-columns: 1fr !important; }
+
+  /* Admin */
+  .admin-cal-grid { grid-template-columns: 1fr !important; }
+  .admin-kpis { grid-template-columns: repeat(2,1fr) !important; }
+  .admin-table { font-size: 11px !important; }
+
+  /* General */
+  section { padding-left: 4% !important; padding-right: 4% !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-stats { grid-template-columns: repeat(2,1fr) !important; }
+  .about-stats { grid-template-columns: repeat(2,1fr) !important; }
+  .portfolio-grid { grid-template-columns: repeat(2,1fr) !important; }
+  .footer-grid { grid-template-columns: 1fr !important; }
+  .admin-kpis { grid-template-columns: repeat(2,1fr) !important; }
+}

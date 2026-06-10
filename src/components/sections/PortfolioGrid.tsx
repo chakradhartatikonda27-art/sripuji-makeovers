@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { PORTFOLIO_ITEMS } from '@/lib/constants'
+import { useBreakpoint } from '@/hooks/useBreakpoint'
 
 const CATS = ['All', 'Bridal', 'Engagement', 'Function', 'Photoshoot', 'Groom']
 
@@ -17,6 +18,7 @@ interface PortfolioItem {
 }
 
 export default function PortfolioGrid() {
+  const { isMobile } = useBreakpoint()
   const [active, setActive]   = useState('All')
   const [dbItems, setDbItems] = useState<PortfolioItem[]>([])
   const [loaded, setLoaded]   = useState(false)
@@ -48,7 +50,7 @@ export default function PortfolioGrid() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '0', border: '2px solid #fff' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: '0', border: '2px solid #fff' }}>
         {items.map((p, i) => (
           <motion.div key={i}
             initial={{ opacity: 0 }}
