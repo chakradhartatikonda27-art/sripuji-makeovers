@@ -83,7 +83,7 @@ export default function AdminPage() {
     if(blocked.includes(ds))return 'blocked'
     const bks=getDayBks(ds)
     if(bks.length===0)return 'empty'
-    if(bks.length>=ALL_SLOTS.length)return 'full'
+    if(bks.length>=4)return 'full'
     return 'partial'
   }
 
