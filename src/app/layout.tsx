@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     canonical: 'https://sripuji-makeovers-eight.vercel.app',
   },
   verification: {
-    google: 'add-your-google-search-console-verification-here',
+    google: 'google8ba5529027d804a4',
   },
 }
 
