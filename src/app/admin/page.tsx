@@ -301,12 +301,18 @@ export default function AdminPage() {
                         ✓ Unblock This Date
                       </button>
                     ) : (
-                      <button onClick={()=>blockDate(selDate)}
-                        style={{padding:'7px 16px',borderRadius:'6px',border:'1.5px solid #D1D5DB',background:'#F9FAFB',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'#6B7280',transition:'all 0.2s'}}
-                        onMouseEnter={e=>{e.currentTarget.style.borderColor='#882020';e.currentTarget.style.color='#882020'}}
-                        onMouseLeave={e=>{e.currentTarget.style.borderColor='#D1D5DB';e.currentTarget.style.color='#6B7280'}}>
-                        🔒 Block Entire Day
-                      </button>
+                      <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
+                        <button onClick={()=>blockDate(selDate)}
+                          style={{padding:'7px 16px',borderRadius:'6px',border:'1.5px solid #D1D5DB',background:'#F9FAFB',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'#6B7280',transition:'all 0.2s'}}
+                          onMouseEnter={e=>{e.currentTarget.style.borderColor='#882020';e.currentTarget.style.color='#882020'}}
+                          onMouseLeave={e=>{e.currentTarget.style.borderColor='#D1D5DB';e.currentTarget.style.color='#6B7280'}}>
+                          🔒 Block Day
+                        </button>
+                        <button onClick={()=>{setShowAddForm(!showAddForm);setEditBk(null)}}
+                          style={{padding:'7px 16px',borderRadius:'6px',border:'1.5px solid var(--coral)',background:showAddForm?'var(--coral)':'var(--blush)',color:showAddForm?'#fff':'var(--coral)',fontSize:'11px',fontWeight:600,cursor:'pointer',transition:'all 0.2s'}}>
+                          {showAddForm?'✕ Cancel':'➕ Add Booking'}
+                        </button>
+                      </div>
                     )}
                   </>
                 ) : (
@@ -320,13 +326,7 @@ export default function AdminPage() {
               {/* Slots */}
               <div style={{flex:1,overflowY:'auto',padding:'14px'}}>
 
-                {/* Add Booking Button */}
-                {selDate && !selBlocked && (
-                  <button onClick={()=>setShowAddForm(!showAddForm)}
-                    style={{width:'100%',padding:'10px',marginBottom:'12px',borderRadius:'8px',border:'1.5px solid var(--coral)',background:showAddForm?'var(--coral)':'var(--blush)',color:showAddForm?'#fff':'var(--coral)',fontSize:'12px',fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
-                    {showAddForm ? '✕ Cancel' : '➕ Add Booking Manually'}
-                  </button>
-                )}
+
 
                 {/* Add Booking Form */}
                 {showAddForm && selDate && (
