@@ -58,7 +58,23 @@ export default function AdminPage() {
   async function logout(){await fetch('/api/admin/auth',{method:'DELETE'});router.push('/admin/login')}
   async function updateStatus(id:string,status:string){
     const res=await fetch(`/api/bookings/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})})
-    if(res.ok){toast.success(`Updated to ${status}`);load()}else toast.error('Failed')
+    if(res.ok){
+      toast.success(`Booking ${status}!`)
+      // Find booking details for WhatsApp
+      const bk = all.find(b=>b.id===id)
+      if(bk && bk.phone){
+        const phone = bk.phone.replace(/[^0-9]/g,'')
+        const fullPhone = phone.startsWith('91') ? phone : '91'+phone
+        if(status==='confirmed'){
+          const msg = encodeURIComponent(`Hi ${bk.name}! 🌸\n\nYour booking with Sripuji Makeovers is CONFIRMED! ✅\n\n📅 Date: ${bk.booking_date}\n⏰ Time: ${bk.booking_time}\n💄 Service: ${bk.service}\n🔖 Ref: ${bk.booking_ref}\n\nPlease be ready 15 mins before your appointment. See you soon! 💄`)
+          window.open(`https://wa.me/${fullPhone}?text=${msg}`, '_blank')
+        } else if(status==='cancelled'){
+          const msg = encodeURIComponent(`Hi ${bk.name},\n\nUnfortunately we couldn't confirm your booking request for ${bk.booking_date} at ${bk.booking_time}.\n\nPlease contact us to reschedule: https://wa.me/918885397517\n\nSorry for the inconvenience! 🙏`)
+          window.open(`https://wa.me/${fullPhone}?text=${msg}`, '_blank')
+        }
+      }
+      load()
+    }else toast.error('Failed')
   }
   async function blockDate(date:string){
     const res=await fetch('/api/blocked-dates',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})})

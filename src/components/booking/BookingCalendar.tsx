@@ -134,9 +134,16 @@ export default function BookingCalendar() {
         📱 {confirmed.phone}<br />
         🔖 Ref: <strong>{confirmed.ref}</strong>
       </div>
-      <div style={{ marginTop: '16px', padding: '12px 14px', background: '#FEF3D5', border: '1px solid #FDE68A', borderRadius: '8px', fontSize: '12px', color: '#92400E', fontWeight: 600 }}>
-        ⏳ Your booking is pending confirmation. Sri Pujitha will contact you within 2 hours.
+      <div style={{ marginTop: '16px', padding: '12px 14px', background: '#FEF3D5', border: '1px solid #FDE68A', borderRadius: '8px', fontSize: '12px', color: '#92400E', fontWeight: 600, lineHeight: 1.7 }}>
+        ⏳ <strong>Status: Pending Confirmation</strong><br/>
+        Sri Pujitha will review your request and confirm via WhatsApp within 2 hours.<br/>
+        Keep your phone handy — you'll receive a WhatsApp message once confirmed!
       </div>
+      <a href={`https://wa.me/918885397517?text=Hi%20Sri%20Pujitha!%20I%20just%20booked%20an%20appointment%20(Ref:%20${confirmed.ref}).%20Please%20confirm%20my%20booking!`}
+        target="_blank" rel="noopener"
+        style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: '#25D366', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>
+        💬 Message Sri Pujitha on WhatsApp
+      </a>
       <button onClick={() => setConfirmed(null)}
         style={{ marginTop: '16px', width: '100%', padding: '13px', background: 'var(--coral)', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
         Make Another Booking
