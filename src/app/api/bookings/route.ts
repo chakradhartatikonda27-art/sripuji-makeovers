@@ -6,6 +6,9 @@ async function generateRef(sb: ReturnType<typeof supabaseAdmin>) {
   return `SP-${new Date().getFullYear()}-${String((count || 0) + 1).padStart(4, '0')}`
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function POST(req: NextRequest) {
   const sb   = supabaseAdmin()
   const body = await req.json()
@@ -14,11 +17,22 @@ export async function POST(req: NextRequest) {
   if (!name || !phone || !service || !booking_date || !booking_time)
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
 
+  // Always check blocked dates (even admin)
   const { data: blk } = await sb.from('blocked_dates').select('id').eq('blocked_date', booking_date).maybeSingle()
-  if (blk) return NextResponse.json({ error: 'This date is unavailable. Please choose another date.' }, { status: 409 })
+  if (blk) return NextResponse.json({ error: 'This date is blocked. Please choose another date.' }, { status: 409 })
 
-  const { data: existing } = await sb.from('bookings').select('id').eq('booking_date', booking_date).eq('booking_time', booking_time).neq('status', 'cancelled').maybeSingle()
-  if (existing) return NextResponse.json({ error: 'This time slot is already booked. Please choose another time.' }, { status: 409 })
+  // Always check duplicate time slot (even admin)
+  const { data: existing } = await sb.from('bookings')
+    .select('id,name,status')
+    .eq('booking_date', booking_date)
+    .eq('booking_time', booking_time)
+    .neq('status', 'cancelled')
+    .maybeSingle()
+
+  if (existing)
+    return NextResponse.json({ 
+      error: `This time slot (${booking_time}) is already booked. Please choose another time.` 
+    }, { status: 409 })
 
   let price = service_price
   if (!price) {
@@ -40,9 +54,6 @@ export async function POST(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true, booking: data }, { status: 201 })
 }
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 export async function GET(req: NextRequest) {
   const sb     = supabaseAdmin()
