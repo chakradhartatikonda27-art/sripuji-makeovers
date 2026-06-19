@@ -161,7 +161,7 @@ export default function AdminPage() {
     <div style={{minHeight:'100vh',background:'var(--bg)',fontFamily:'var(--font-inter)'}}>
 
       {/* Header */}
-      <div style={{background:'#fff',borderBottom:'1px solid var(--border)',padding:'28px 5% 0'}}>
+      <div style={{background:'#fff',borderBottom:'1px solid var(--border)',padding:isMobile?'16px 4% 0':'28px 5% 0'}}>
         <div style={{maxWidth:'1400px',margin:'0 auto'}}>
           <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'20px',flexWrap:'wrap',gap:'12px'}}>
             <div>
@@ -177,7 +177,7 @@ export default function AdminPage() {
             </div>
           </div>
           {/* KPIs */}
-          <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'10px',marginBottom:'20px'}}>
+          <div style={{display:'grid',gridTemplateColumns:isMobile?'repeat(2,1fr)':'repeat(5,1fr)',gap:'10px',marginBottom:'20px'}}>
             {[{n:all.length,l:'Total',c:'var(--coral)'},{n:conf,l:'Confirmed',c:'#2E5A0D'},{n:pend,l:'Pending',c:'#7A4A00'},{n:comp,l:'Completed',c:'#0C5E42'},{n:`₹${(revenue/1000).toFixed(0)}K`,l:'Revenue',c:'var(--coral)'}].map(k=>(
               <div key={k.l} style={{background:'var(--blush)',border:'1px solid var(--border)',borderRadius:'10px',padding:'14px'}}>
                 <span style={{fontSize:'26px',fontWeight:800,color:k.c,display:'block',letterSpacing:'-1px',lineHeight:1}}>{k.n}</span>
@@ -194,11 +194,11 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div style={{padding:'28px 5%',maxWidth:'1400px',margin:'0 auto'}}>
+      <div style={{padding:isMobile?'16px 4%':'28px 5%',maxWidth:'1400px',margin:'0 auto'}}>
 
         {/* ── CALENDAR TAB ── */}
         {tab==='calendar' && (
-          <div style={{display:'grid',gridTemplateColumns:'1fr 360px',gap:'20px'}}>
+          <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 360px',gap:'20px'}}>
 
             {/* Calendar */}
             <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:'14px',overflow:'hidden'}}>
@@ -298,7 +298,7 @@ export default function AdminPage() {
             </div>
 
             {/* Side Panel */}
-            <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:'14px',overflow:'hidden',display:'flex',flexDirection:'column',maxHeight:'700px'}}>
+            <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:'14px',overflow:'hidden',display:'flex',flexDirection:'column',maxHeight:isMobile?'500px':'700px'}}>
               {/* Panel header */}
               <div style={{padding:'18px',borderBottom:'1px solid var(--border)',background:'var(--bg)'}}>
                 {selDate ? (
@@ -536,7 +536,7 @@ export default function AdminPage() {
 
         {/* ── ANALYTICS TAB ── */}
         {tab==='analytics' && analytics && (
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'20px'}}>
+          <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 1fr',gap:'20px'}}>
             <div style={{background:'#fff',border:'1px solid var(--border)',borderRadius:'12px',padding:'24px'}}>
               <div style={{fontSize:'11px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',color:'var(--ink)',marginBottom:'16px'}}>Monthly Revenue (₹)</div>
               <div style={{display:'flex',alignItems:'flex-end',gap:'8px',height:'130px'}}>
