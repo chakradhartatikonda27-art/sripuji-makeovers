@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     event_date: event_date || null,
     venue: venue || null,
     notes: notes || null,
-    status: 'confirmed',
+    status: body.admin_override ? 'confirmed' : 'pending',
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
