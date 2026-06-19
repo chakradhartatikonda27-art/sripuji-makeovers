@@ -123,16 +123,17 @@ export default function BookingCalendar() {
       style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '20px', padding: '44px 36px', maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
       <span style={{ fontSize: '52px', display: 'block', marginBottom: '12px' }}>🌸</span>
       <h2 style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '8px' }}>
-        Booking <span style={{ color: 'var(--coral)' }}>Request Sent!</span>
+        Request <span style={{ color: 'var(--coral)' }}>Submitted!</span>
       </h2>
-      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Your booking request is pending. Sri Pujitha will confirm via WhatsApp within 2 hours!</p>
+      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Your booking request has been received. Please wait for Sri Pujitha to confirm!</p>
       <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '12px', padding: '16px', fontSize: '13px', color: '#993556', lineHeight: 2.2, textAlign: 'left', fontWeight: 500 }}>
         <strong>{confirmed.name}</strong><br />
-        📅 {confirmed.date}<br />
-        ⏰ {confirmed.time}<br />
-        💄 {confirmed.service}<br />
-        📱 {confirmed.phone}<br />
-        🔖 Ref: <strong>{confirmed.ref}</strong>
+        📅 Date: {confirmed.date}<br />
+        ⏰ Time: {confirmed.time}<br />
+        💄 Service: {confirmed.service}<br />
+        📱 Phone: {confirmed.phone}<br />
+        🔖 Booking ID: <strong>{confirmed.ref}</strong><br />
+        🟡 Status: <strong style={{color:'#92400E'}}>PENDING CONFIRMATION</strong>
       </div>
       <div style={{ marginTop: '16px', padding: '12px 14px', background: '#FEF3D5', border: '1px solid #FDE68A', borderRadius: '8px', fontSize: '12px', color: '#92400E', fontWeight: 600, lineHeight: 1.7 }}>
         ⏳ <strong>Status: Pending Confirmation</strong><br/>
