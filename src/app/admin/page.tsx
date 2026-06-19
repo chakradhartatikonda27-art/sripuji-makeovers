@@ -177,7 +177,7 @@ export default function AdminPage() {
             </div>
           </div>
           {/* KPIs */}
-          <div style={{display:'grid',gridTemplateColumns:isMobile?'repeat(2,1fr)':'repeat(5,1fr)',gap:'10px',marginBottom:'20px'}}>
+          <div style={{display:'grid',gridTemplateColumns:isMobile?'repeat(2,1fr)':'repeat(5,1fr)',gap:'10px',marginBottom:'20px',gridAutoRows:'1fr'}}>
             {[{n:all.length,l:'Total',c:'var(--coral)'},{n:conf,l:'Confirmed',c:'#2E5A0D'},{n:pend,l:'Pending',c:'#7A4A00'},{n:comp,l:'Completed',c:'#0C5E42'},{n:`₹${(revenue/1000).toFixed(0)}K`,l:'Revenue',c:'var(--coral)'}].map(k=>(
               <div key={k.l} style={{background:'var(--blush)',border:'1px solid var(--border)',borderRadius:'10px',padding:'14px'}}>
                 <span style={{fontSize:'26px',fontWeight:800,color:k.c,display:'block',letterSpacing:'-1px',lineHeight:1}}>{k.n}</span>
