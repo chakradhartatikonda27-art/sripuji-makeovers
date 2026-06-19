@@ -123,9 +123,9 @@ export default function BookingCalendar() {
       style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '20px', padding: '44px 36px', maxWidth: '480px', margin: '0 auto', textAlign: 'center' }}>
       <span style={{ fontSize: '52px', display: 'block', marginBottom: '12px' }}>🌸</span>
       <h2 style={{ fontSize: '26px', fontWeight: 800, letterSpacing: '-0.5px', marginBottom: '8px' }}>
-        Booking <span style={{ color: 'var(--coral)' }}>Received!</span>
+        Booking <span style={{ color: 'var(--coral)' }}>Request Sent!</span>
       </h2>
-      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Sri Pujitha will confirm your booking via WhatsApp shortly!</p>
+      <p style={{ fontSize: '13px', color: 'var(--muted2)', marginBottom: '20px' }}>Your booking request is pending. Sri Pujitha will confirm via WhatsApp within 2 hours!</p>
       <div style={{ background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '12px', padding: '16px', fontSize: '13px', color: '#993556', lineHeight: 2.2, textAlign: 'left', fontWeight: 500 }}>
         <strong>{confirmed.name}</strong><br />
         📅 {confirmed.date}<br />
