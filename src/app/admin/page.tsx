@@ -29,7 +29,7 @@ export default function AdminPage() {
   const [selDate, setSelDate]   = useState<string|null>(null)
   const [showAddForm, setShowAddForm] = useState(false)
   const [editBk, setEditBk]       = useState<any>(null)
-  const [addForm, setAddForm]     = useState({ name:'', phone:'', service:'', booking_time:'', venue:'', notes:'' })
+  const [addForm, setAddForm]     = useState({ name:'', phone:'', service:'', booking_time:'', end_time:'', venue:'', notes:'' })
   const [search, setSearch]     = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
@@ -94,6 +94,7 @@ export default function AdminPage() {
         service: addForm.service || 'Custom Booking',
         service_price: 0,
         booking_date: selDate, booking_time: addForm.booking_time,
+        end_time: (addForm as any).end_time || null,
         event_date: selDate, venue: addForm.venue, notes: addForm.notes,
         status: 'confirmed',
         admin_override: true,
@@ -102,7 +103,7 @@ export default function AdminPage() {
     if (res.ok) {
       toast.success('Booking added!')
       setShowAddForm(false)
-      setAddForm({ name:'', phone:'', service:'', booking_time:'', venue:'', notes:'' })
+      setAddForm({ name:'', phone:'', service:'', booking_time:'', end_time:'', venue:'', notes:'' })
       load()
     } else toast.error('Failed to add booking')
   }
@@ -352,7 +353,6 @@ export default function AdminPage() {
                       {label:'Client Name *',key:'name',placeholder:'Full name'},
                       {label:'Phone *',key:'phone',placeholder:'+91 98765 43210'},
                       {label:'Service',key:'service',placeholder:'e.g. Bridal Makeup'},
-                      {label:'Event Time *',key:'booking_time',placeholder:'e.g. 8:00 AM or 7 PM'},
                       {label:'Venue',key:'venue',placeholder:'Hall name or address'},
                       {label:'Notes',key:'notes',placeholder:'Special requirements'},
                     ] as any[]).map((f:any)=>(
@@ -363,6 +363,28 @@ export default function AdminPage() {
                           style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff'}}/>
                       </div>
                     ))}
+                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'8px',marginBottom:'7px'}}>
+                      <div>
+                        <label style={{fontSize:'9px',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase' as const,color:'var(--muted2)',display:'block',marginBottom:'3px'}}>Start Time *</label>
+                        <select value={addForm.booking_time} onChange={(e:any)=>setAddForm({...addForm,booking_time:e.target.value})}
+                          style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff',appearance:'none' as const}}>
+                          <option value="">Select</option>
+                          {['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM','10:00 PM'].map(t=>(
+                            <option key={t} value={t}>{t}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label style={{fontSize:'9px',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase' as const,color:'var(--muted2)',display:'block',marginBottom:'3px'}}>End Time *</label>
+                        <select value={(addForm as any).end_time||''} onChange={(e:any)=>setAddForm({...addForm,end_time:e.target.value} as any)}
+                          style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff',appearance:'none' as const}}>
+                          <option value="">Select</option>
+                          {['7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM','9:00 PM','10:00 PM','11:00 PM'].map(t=>(
+                            <option key={t} value={t}>{t}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
                     <button onClick={addBooking}
                       style={{width:'100%',padding:'10px',background:'var(--coral)',color:'#fff',borderRadius:'7px',fontSize:'12px',fontWeight:700,border:'none',cursor:'pointer',marginTop:'4px'}}>
                       ✓ Confirm Booking
