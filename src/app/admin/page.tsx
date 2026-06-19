@@ -290,9 +290,9 @@ export default function AdminPage() {
                     </div>
                     <div style={{fontSize:'12px',fontWeight:600,marginBottom:'10px',color:selBlocked?'#6B7280':selBks.length===0?'#15803D':selBks.length>=4?'#882020':'#92400E'}}>
                       {selBlocked?'⚫ Blocked — No bookings accepted':
-                       selBks.length===0?'🟢 Fully Available — All 4 slots open':
-                       selBks.length>=4?'🔴 Fully Booked — All slots taken':
-                       `🟡 ${selBks.length} booked · ${4-selBks.length} slots still available`}
+                       selBks.length===0?'🟢 Fully Available':
+                       selBks.length>=4?'🔴 Fully Booked':
+                       `🟡 ${selBks.length} booking${selBks.length>1?'s':''} on this date`}
                     </div>
                     {selBlocked ? (
                       <button onClick={()=>unblockDate(selDate)}
@@ -318,6 +318,80 @@ export default function AdminPage() {
 
               {/* Slots */}
               <div style={{flex:1,overflowY:'auto',padding:'14px'}}>
+
+                {/* Add Booking Button */}
+                {selDate && !selBlocked && (
+                  <button onClick={()=>setShowAddForm(!showAddForm)}
+                    style={{width:'100%',padding:'10px',marginBottom:'12px',borderRadius:'8px',border:'1.5px solid var(--coral)',background:showAddForm?'var(--coral)':'var(--blush)',color:showAddForm?'#fff':'var(--coral)',fontSize:'12px',fontWeight:700,cursor:'pointer',transition:'all 0.2s'}}>
+                    {showAddForm ? '✕ Cancel' : '➕ Add Booking Manually'}
+                  </button>
+                )}
+
+                {/* Add Booking Form */}
+                {showAddForm && selDate && (
+                  <div style={{background:'var(--blush)',border:'1.5px solid var(--blush3)',borderRadius:'12px',padding:'14px',marginBottom:'12px'}}>
+                    <div style={{fontSize:'11px',fontWeight:700,color:'var(--coral)',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'1px'}}>New Booking — {selDate}</div>
+                    {([
+                      {label:'Client Name *',key:'name',placeholder:'Full name'},
+                      {label:'Phone *',key:'phone',placeholder:'+91 98765 43210'},
+                      {label:'Service',key:'service',placeholder:'e.g. Bridal Makeup'},
+                      {label:'Event Time *',key:'booking_time',placeholder:'e.g. 8:00 AM or 7 PM'},
+                      {label:'Venue',key:'venue',placeholder:'Hall name or address'},
+                      {label:'Notes',key:'notes',placeholder:'Special requirements'},
+                    ] as any[]).map((f:any)=>(
+                      <div key={f.key} style={{marginBottom:'7px'}}>
+                        <label style={{fontSize:'9px',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase' as const,color:'var(--muted2)',display:'block',marginBottom:'3px'}}>{f.label}</label>
+                        <input value={(addForm as any)[f.key]} onChange={(e:any)=>setAddForm({...addForm,[f.key]:e.target.value})}
+                          placeholder={f.placeholder}
+                          style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff'}}/>
+                      </div>
+                    ))}
+                    <button onClick={addBooking}
+                      style={{width:'100%',padding:'10px',background:'var(--coral)',color:'#fff',borderRadius:'7px',fontSize:'12px',fontWeight:700,border:'none',cursor:'pointer',marginTop:'4px'}}>
+                      ✓ Confirm Booking
+                    </button>
+                  </div>
+                )}
+
+                {/* Edit Booking Form */}
+                {editBk && (
+                  <div style={{background:'#FFF5F3',border:'1.5px solid var(--blush3)',borderRadius:'12px',padding:'14px',marginBottom:'12px'}}>
+                    <div style={{fontSize:'11px',fontWeight:700,color:'var(--coral)',marginBottom:'10px',textTransform:'uppercase',letterSpacing:'1px'}}>✏️ Edit — {editBk.name}</div>
+                    {([
+                      {label:'Event Time',key:'booking_time',placeholder:'e.g. 8:00 AM'},
+                      {label:'Venue',key:'venue',placeholder:'Hall name or address'},
+                      {label:'Notes',key:'notes',placeholder:'Special requirements'},
+                    ] as any[]).map((f:any)=>(
+                      <div key={f.key} style={{marginBottom:'7px'}}>
+                        <label style={{fontSize:'9px',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase' as const,color:'var(--muted2)',display:'block',marginBottom:'3px'}}>{f.label}</label>
+                        <input value={(editBk as any)[f.key]||''} onChange={(e:any)=>setEditBk({...editBk,[f.key]:e.target.value})}
+                          placeholder={f.placeholder}
+                          style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff'}}/>
+                      </div>
+                    ))}
+                    <div style={{marginBottom:'7px'}}>
+                      <label style={{fontSize:'9px',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase' as const,color:'var(--muted2)',display:'block',marginBottom:'3px'}}>Status</label>
+                      <select value={editBk.status} onChange={(e:any)=>setEditBk({...editBk,status:e.target.value})}
+                        style={{width:'100%',padding:'7px 10px',border:'1.5px solid var(--border)',borderRadius:'6px',fontSize:'12px',fontFamily:'inherit',outline:'none',background:'#fff',appearance:'none' as const}}>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                    <div style={{display:'flex',gap:'8px'}}>
+                      <button onClick={saveEdit}
+                        style={{flex:1,padding:'9px',background:'var(--coral)',color:'#fff',borderRadius:'7px',fontSize:'11px',fontWeight:700,border:'none',cursor:'pointer'}}>
+                        💾 Save Changes
+                      </button>
+                      <button onClick={()=>setEditBk(null)}
+                        style={{padding:'9px 14px',background:'#fff',color:'var(--muted)',borderRadius:'7px',fontSize:'11px',fontWeight:600,border:'1.5px solid var(--border)',cursor:'pointer'}}>
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 {!selDate ? (
                   <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100%',padding:'32px',textAlign:'center',color:'var(--muted2)'}}>
                     <div style={{fontSize:'48px',marginBottom:'12px',opacity:0.4}}>📅</div>
