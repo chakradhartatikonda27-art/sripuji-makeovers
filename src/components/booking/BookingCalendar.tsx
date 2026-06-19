@@ -145,10 +145,16 @@ export default function BookingCalendar() {
         style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: '#25D366', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>
         💬 Message Sri Pujitha on WhatsApp
       </a>
-      <button onClick={() => setConfirmed(null)}
-        style={{ marginTop: '16px', width: '100%', padding: '13px', background: 'var(--coral)', color: '#fff', borderRadius: '8px', fontSize: '13px', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-        Make Another Booking
-      </button>
+      <div style={{ marginTop: '12px', display: 'flex', gap: '10px' }}>
+        <a href={`/booking/status?ref=${confirmed.ref}`}
+          style={{ flex: 1, padding: '12px', background: 'var(--blush)', color: 'var(--coral)', borderRadius: '8px', fontSize: '12px', fontWeight: 700, textDecoration: 'none', textAlign: 'center', border: '1.5px solid var(--blush3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          🔍 Check Status
+        </a>
+        <button onClick={() => setConfirmed(null)}
+          style={{ flex: 1, padding: '12px', background: 'var(--coral)', color: '#fff', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+          📅 New Booking
+        </button>
+      </div>
     </motion.div>
   )
 
