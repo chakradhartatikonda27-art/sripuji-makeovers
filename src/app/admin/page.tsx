@@ -1,5 +1,6 @@
 'use client'
 import ContentTab from '@/components/admin/ContentTab'
+import { useMobile } from '@/context/MobileContext'
 
 import { useEffect, useState, useCallback } from 'react'
 
@@ -15,6 +16,7 @@ const STATUS_TEXT:   Record<string,string> = { confirmed:'#2E5A0D', completed:'#
 
 export default function AdminPage() {
   
+  const { isMobile } = useMobile()
   const router = useRouter()
   const [tab, setTab]           = useState<'calendar'|'bookings'|'analytics'>('calendar')
   const [all, setAll]           = useState<Booking[]>([])
@@ -25,6 +27,9 @@ export default function AdminPage() {
   const [calY, setCalY]         = useState(new Date().getFullYear())
   const [calM, setCalM]         = useState(new Date().getMonth())
   const [selDate, setSelDate]   = useState<string|null>(null)
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [editBk, setEditBk]       = useState<any>(null)
+  const [addForm, setAddForm]     = useState({ name:'', phone:'', service:'', booking_time:'', venue:'', notes:'' })
   const [search, setSearch]     = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
@@ -63,6 +68,38 @@ export default function AdminPage() {
     await fetch('/api/blocked-dates',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})})
     toast.success(`${date} unblocked`);load()
   }
+  async function addBooking() {
+    if (!selDate || !addForm.name || !addForm.phone || !addForm.booking_time) { toast.error('Name, phone and time required'); return }
+    const svc = all.find(b => b.service === addForm.service)
+    const res = await fetch('/api/bookings', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: addForm.name, phone: addForm.phone, email: '',
+        service: addForm.service || 'Custom Booking',
+        service_price: 0,
+        booking_date: selDate, booking_time: addForm.booking_time,
+        event_date: selDate, venue: addForm.venue, notes: addForm.notes,
+        status: 'confirmed',
+      }),
+    })
+    if (res.ok) {
+      toast.success('Booking added!')
+      setShowAddForm(false)
+      setAddForm({ name:'', phone:'', service:'', booking_time:'', venue:'', notes:'' })
+      load()
+    } else toast.error('Failed to add booking')
+  }
+
+  async function saveEdit() {
+    if (!editBk) return
+    const res = await fetch(`/api/bookings/${editBk.id}`, {
+      method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ booking_time: editBk.booking_time, venue: editBk.venue, notes: editBk.notes, status: editBk.status }),
+    })
+    if (res.ok) { toast.success('Updated!'); setEditBk(null); load() }
+    else toast.error('Update failed')
+  }
+
   function exportCsv(){
     let csv='Ref,Name,Phone,Service,Date,Time,Status\n'
     all.forEach(b=>csv+=`${b.booking_ref},"${b.name}",${b.phone},"${b.service}",${b.booking_date},${b.booking_time},${b.status}\n`)
