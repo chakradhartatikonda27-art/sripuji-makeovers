@@ -9,7 +9,7 @@ export async function GET() {
     const userId = process.env.INSTAGRAM_USER_ID
 
     if (!token || !userId) {
-      return NextResponse.json({ error: 'Instagram not configured', token: !!token, userId: !!userId, env: Object.keys(process.env).filter(k=>k.includes('INSTAGRAM')) }, { status: 500 })
+      return NextResponse.json({ error: 'Instagram not configured' }, { status: 500 })
     }
 
     const fields = 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp'
