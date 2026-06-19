@@ -55,6 +55,7 @@ export const NAV_LINKS = [
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Reviews',   href: '/#reviews' },
   { label: 'Contact',   href: '/contact' },
+  { label: 'Track Booking', href: '/booking/status' },
   { label: 'Location',  href: '/#location' },
   { label: 'Admin',     href: '/admin' },
 ]
