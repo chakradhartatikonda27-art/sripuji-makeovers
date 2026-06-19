@@ -4,10 +4,6 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import BookingCalendar from '@/components/booking/BookingCalendar'
 
-export const metadata: Metadata = {
-  title: 'Book an Appointment',
-  description: 'Book your makeup appointment with Sripuji Makeovers. Select your date, time and service online.',
-}
 
 export default function BookingPage() {
   return (

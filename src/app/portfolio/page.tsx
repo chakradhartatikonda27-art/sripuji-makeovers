@@ -4,10 +4,6 @@ import Footer from '@/components/layout/Footer'
 import PortfolioGrid from '@/components/sections/PortfolioGrid'
 import InstagramFeed from '@/components/sections/InstagramFeed'
 
-export const metadata: Metadata = {
-  title: 'Portfolio',
-  description: 'Real work, real brides — portfolio of Sripuji Makeovers bridal and function makeup looks.',
-}
 
 const YT_VIDEOS = [
   { id: 'UCIvr6tmV__RnczpydCsuIfA', title: 'Bridal Makeup Transformation', thumb: 'https://img.youtube.com/vi/default/maxresdefault.jpg' },

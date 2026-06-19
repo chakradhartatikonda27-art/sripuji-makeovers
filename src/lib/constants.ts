@@ -77,20 +77,49 @@ export const PORTFOLIO_ITEMS = [
 
 export const LOCAL_BUSINESS_SCHEMA = {
   '@context': 'https://schema.org',
-  '@type': ['LocalBusiness', 'BeautySalon'],
+  '@type': 'BeautySalon',
   name: 'Sripuji Makeovers',
-  description: 'Professional bridal makeup artist in Rajahmundry, East Godavari, Andhra Pradesh.',
-  url: SITE.url,
-  telephone: SITE.phone,
-  email: SITE.email,
-  priceRange: '₹₹',
+  description: 'Professional bridal makeup artist in Rajahmundry, East Godavari. Specialising in glamorous, minimalistic & smokey-eyed bridal looks.',
+  url: 'https://sripuji-makeovers-eight.vercel.app',
+  telephone: '+918885397517',
+  email: 'sripujimakeovers@gmail.com',
+  founder: { '@type': 'Person', name: 'Sri Pujitha' },
+  foundingDate: '2023',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Rajahmundry',
     addressRegion: 'Andhra Pradesh',
-    postalCode: '533101',
     addressCountry: 'IN',
   },
-  geo: { '@type': 'GeoCoordinates', latitude: 17.0005, longitude: 81.804 },
-  sameAs: [SITE.instagram, SITE.youtube],
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 17.0005,
+    longitude: 81.8040,
+  },
+  areaServed: [
+    'Rajahmundry', 'Kakinada', 'Amalapuram', 'Bhimavaram',
+    'East Godavari', 'Andhra Pradesh',
+  ],
+  priceRange: '₹₹',
+  openingHours: 'Mo-Su 06:00-22:00',
+  sameAs: [
+    'https://www.instagram.com/sripuji_makeovers/',
+    'https://www.youtube.com/channel/UCIvr6tmV__RnczpydCsuIfA',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Makeup Services',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bridal Makeup' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Engagement Makeup' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Reception Makeup' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Saree Draping' } },
+    ],
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5',
+    reviewCount: '500',
+    bestRating: '5',
+  },
 }
