@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '@/lib/rateLimit'
+import { logSecurity } from '@/lib/logger'
 
 export async function POST(req: NextRequest) {
   // Rate limit — max 5 login attempts per minute per IP
   const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
   const { allowed } = rateLimit(ip, 5, 60000)
   if (!allowed) {
+    logSecurity('RATE_LIMIT_AUTH', ip)
     return NextResponse.json({ error: 'Too many attempts. Please wait.' }, { status: 429 })
   }
 
@@ -26,10 +28,12 @@ export async function POST(req: NextRequest) {
 
     if (!isValid) {
       // Add delay to slow down brute force
+      logSecurity('FAILED_LOGIN', ip)
       await new Promise(r => setTimeout(r, 1000))
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
     }
 
+    logSecurity('SUCCESSFUL_LOGIN', ip)
     const res = NextResponse.json({ success: true })
     res.cookies.set('admin_token', 'authenticated', {
       httpOnly: true,

@@ -1,0 +1,9 @@
+# SiyanTech Security Rules
+- Never hardcode secrets or API keys
+- Always sanitize user inputs
+- Always use parameterized queries
+- Always rate limit public APIs
+- Use httpOnly secure cookies for auth
+- Enable RLS on all Supabase tables
+- Return generic error messages to clients
+- Use TypeScript strict mode

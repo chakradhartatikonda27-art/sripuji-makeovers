@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const body = await req.json()
   const updates: Record<string, unknown> = {}
   if (body.status        !== undefined) updates.status        = body.status
@@ -12,7 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (body.booking_date  !== undefined) updates.booking_date  = body.booking_date
   updates.updated_at = new Date().toISOString()
   const { data, error } = await supabaseAdmin()
-    .from('bookings').update(updates).eq('id', params.id).select().single()
+    .from('bookings').update(updates).eq('id', id).select().single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true, booking: data })
 }
