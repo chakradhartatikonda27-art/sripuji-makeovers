@@ -429,6 +429,7 @@ export default function AdminPage() {
                       <div style={{display:'flex',gap:'6px',marginTop:'10px',flexWrap:'wrap'}}>
                         {bk.status!=='completed'&&(<button onClick={()=>updateStatus(bk.id,'completed')} style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #BBF7D0',background:'#F0FDF4',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#15803D'}}>✓ Mark Done</button>)}
                         <a href={`https://wa.me/${bk.phone.replace(/[^0-9]/g,'')}`} target="_blank" rel="noopener" style={{padding:'5px 12px',borderRadius:'6px',background:'#25D366',fontSize:'10px',fontWeight:700,textDecoration:'none',color:'#fff',display:'inline-flex',alignItems:'center'}}>💬 WhatsApp</a>
+                        <button onClick={()=>{setEditBk({...bk});setShowAddForm(false)}} style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid var(--border)',background:'#fff',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'var(--muted)'}}>✏️ Edit</button>
                         {bk.status!=='cancelled'&&(<button onClick={()=>updateStatus(bk.id,'cancelled')} style={{padding:'5px 12px',borderRadius:'6px',border:'1.5px solid #F5C1C1',background:'#FCEAEA',fontSize:'10px',fontWeight:700,cursor:'pointer',color:'#882020'}}>✗ Cancel</button>)}
                       </div>
                     </div>
