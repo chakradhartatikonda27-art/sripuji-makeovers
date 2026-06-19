@@ -80,6 +80,7 @@ export default function AdminPage() {
         booking_date: selDate, booking_time: addForm.booking_time,
         event_date: selDate, venue: addForm.venue, notes: addForm.notes,
         status: 'confirmed',
+        admin_override: true,
       }),
     })
     if (res.ok) {
