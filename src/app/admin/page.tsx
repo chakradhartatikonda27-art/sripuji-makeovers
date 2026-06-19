@@ -35,7 +35,7 @@ export default function AdminPage() {
 
   const load = useCallback(async () => {
     const [bkRes, blkRes, anlRes] = await Promise.all([
-      fetch('/api/bookings').then(r=>r.json()),
+      fetch('/api/bookings', {cache:'no-store'}).then(r=>r.json()),
       fetch('/api/blocked-dates').then(r=>r.json()),
       fetch('/api/admin/analytics').then(r=>r.json()),
     ])

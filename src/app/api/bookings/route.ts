@@ -41,6 +41,9 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true, booking: data }, { status: 201 })
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET(req: NextRequest) {
   const sb     = supabaseAdmin()
   const status = req.nextUrl.searchParams.get('status')
