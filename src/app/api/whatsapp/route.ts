@@ -37,12 +37,8 @@ export async function POST(req: NextRequest) {
     const today   = now.toISOString().split('T')[0]
     let reply     = ''
 
-    // Only artist can use bot commands
-    const isArtist = from === ARTIST_PHONE
-
-    if (!isArtist) {
-      return NextResponse.json({ status: 'ok' })
-    }
+    // Artist check - log for debugging
+    console.log('Message from:', from, 'Artist phone:', ARTIST_PHONE)
 
     // TODAY
     if (text === 'today' || text === 'aaj') {
