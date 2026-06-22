@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { rateLimit } from '@/lib/rateLimit'
 import { sanitizeBooking } from '@/lib/sanitize'
+import { sendWhatsAppMessage, WA_MESSAGES } from '@/lib/whatsapp'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -104,6 +105,13 @@ export async function POST(req: NextRequest) {
   }).select().single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  try {
+    await sendWhatsAppMessage(phone, WA_MESSAGES.bookingReceived(
+      name, booking_date, booking_time, booking.booking_ref
+    ))
+  } catch (e) {
+    console.error('WhatsApp notification failed:', e)
+  }
   return NextResponse.json({ success: true, booking }, { status: 201 })
 }
 

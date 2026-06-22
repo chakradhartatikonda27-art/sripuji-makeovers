@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { sendWhatsAppMessage, WA_MESSAGES } from '@/lib/whatsapp'
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -12,8 +13,26 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.notes         !== undefined) updates.notes         = body.notes
   if (body.booking_date  !== undefined) updates.booking_date  = body.booking_date
   updates.updated_at = new Date().toISOString()
+
   const { data, error } = await supabaseAdmin()
     .from('bookings').update(updates).eq('id', id).select().single()
+
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Send WhatsApp on status change
+  try {
+    if (body.status === 'confirmed' && data.phone) {
+      await sendWhatsAppMessage(data.phone, WA_MESSAGES.bookingConfirmed(
+        data.name, data.booking_date, data.booking_time, data.service, data.booking_ref
+      ))
+    } else if (body.status === 'cancelled' && data.phone) {
+      await sendWhatsAppMessage(data.phone, WA_MESSAGES.bookingRejected(
+        data.name, data.booking_date, data.booking_time
+      ))
+    }
+  } catch (e) {
+    console.error('WhatsApp notification failed:', e)
+  }
+
   return NextResponse.json({ success: true, booking: data })
 }
