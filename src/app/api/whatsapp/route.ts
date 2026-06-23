@@ -155,6 +155,94 @@ export async function POST(req: NextRequest) {
       reply = `🟢 *${freeDate} Unblocked!*\n\nDate is now available for bookings.`
     }
 
+    // THIS MONTH bookings
+    else if (text === 'month' || text === 'june') {
+      const monthStart = `${now.getFullYear()}-06-01`
+      const monthEnd   = `${now.getFullYear()}-06-30`
+      const { data: bks } = await sb.from('bookings').select('*')
+        .gte('booking_date', monthStart).lte('booking_date', monthEnd)
+        .neq('status', 'cancelled').order('booking_date')
+
+      if (!bks?.length) {
+        reply = `📅 *June 2026*
+
+🟢 No bookings this month!`
+      } else {
+        const confirmed = bks.filter(b => b.status === 'confirmed')
+        const pending   = bks.filter(b => b.status === 'pending')
+        const completed = bks.filter(b => b.status === 'completed')
+        reply = `📅 *June 2026 Summary*
+
+✅ Confirmed: ${confirmed.length}
+⏳ Pending: ${pending.length}
+🌸 Completed: ${completed.length}
+📊 Total: ${bks.length}
+
+`
+        bks.forEach((b, i) => {
+          const icon = b.status==='confirmed'?'✅':b.status==='pending'?'⏳':'🌸'
+          reply += `${i+1}. ${icon} ${b.booking_date} ${b.booking_time}
+   👤 ${b.name} | 💄 ${b.service}
+   📱 ${b.phone}
+
+`
+        })
+      }
+    }
+
+    // JULY bookings
+    else if (text === 'july') {
+      const monthStart = `${now.getFullYear()}-07-01`
+      const monthEnd   = `${now.getFullYear()}-07-31`
+      const { data: bks } = await sb.from('bookings').select('*')
+        .gte('booking_date', monthStart).lte('booking_date', monthEnd)
+        .neq('status', 'cancelled').order('booking_date')
+
+      if (!bks?.length) {
+        reply = `📅 *July 2026*
+
+🟢 No bookings yet for July!`
+      } else {
+        const confirmed = bks.filter(b => b.status === 'confirmed')
+        const pending   = bks.filter(b => b.status === 'pending')
+        reply = `📅 *July 2026 Summary*
+
+✅ Confirmed: ${confirmed.length}
+⏳ Pending: ${pending.length}
+📊 Total: ${bks.length}
+
+`
+        bks.forEach((b, i) => {
+          const icon = b.status==='confirmed'?'✅':'⏳'
+          reply += `${i+1}. ${icon} ${b.booking_date} ${b.booking_time}
+   👤 ${b.name} | 💄 ${b.service}
+
+`
+        })
+      }
+    }
+
+    // ALL CONFIRMED bookings
+    else if (text === 'confirmed') {
+      const { data: bks } = await sb.from('bookings').select('*')
+        .eq('status', 'confirmed').order('booking_date')
+      if (!bks?.length) {
+        reply = `✅ No confirmed bookings!`
+      } else {
+        reply = `✅ *Confirmed Bookings (${bks.length})*
+
+`
+        bks.forEach((b, i) => {
+          reply += `${i+1}. 📅 ${b.booking_date} ⏰ ${b.booking_time}
+   👤 ${b.name}
+   💄 ${b.service}
+   📱 ${b.phone}
+
+`
+        })
+      }
+    }
+
     // CHECK DATE e.g. "25" or "25 july"
     else if (/^\d{1,2}(\s+\w+)?$/.test(text)) {
       const parts = text.split(' ')
@@ -189,7 +277,7 @@ export async function POST(req: NextRequest) {
 
     // HELP
     else {
-      reply = `💄 *Sripuji Makeovers Bot*\n\n*Commands:*\n\n📅 *today* — Today's bookings\n📅 *tomorrow* — Tomorrow's schedule\n📅 *week* — This week overview\n📅 *25* — Check June 25\n📅 *25 july* — Check July 25\n⏳ *pending* — Pending approvals\n✅ *accept 1* — Confirm booking #1\n❌ *reject 1* — Cancel booking #1\n🔴 *block 25* — Block June 25\n🟢 *free 25* — Unblock June 25\n\n_Type any command!_ 💄`
+      reply = `💄 *Sripuji Makeovers Bot*\n\n*Commands:*\n\n📅 *today* — Today's bookings\n📅 *tomorrow* — Tomorrow's schedule\n📅 *week* — This week overview\n📅 *month* — June summary\n📅 *july* — July summary\n✅ *confirmed* — All confirmed bookings\n⏳ *pending* — Pending approvals\n📅 *25* — Check June 25\n📅 *25 july* — Check July 25\n✅ *accept 1* — Confirm booking #1\n❌ *reject 1* — Cancel booking #1\n🔴 *block 25* — Block June 25\n🟢 *free 25* — Unblock June 25\n\n_Type any command!_ 💄`
     }
 
     if (reply) await sendWhatsAppMessage(from, reply)
