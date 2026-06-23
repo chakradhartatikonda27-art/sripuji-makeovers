@@ -3,6 +3,7 @@
 export async function sendWhatsAppMessage(to: string, message: string) {
   const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID
   const ACCESS_TOKEN    = process.env.WHATSAPP_ACCESS_TOKEN
+  console.log('WA Token exists:', !!ACCESS_TOKEN, 'Phone ID:', PHONE_NUMBER_ID)
   const phone = to.replace(/[^0-9]/g, '')
   const fullPhone = phone.startsWith('91') ? phone : `91${phone}`
 
@@ -24,8 +25,9 @@ export async function sendWhatsAppMessage(to: string, message: string) {
   )
 
   const data = await res.json()
+  console.log('WhatsApp API response:', JSON.stringify(data).slice(0,200))
   if (!res.ok) {
-    console.error('WhatsApp API error:', data)
+    console.error('WhatsApp API error:', JSON.stringify(data))
     throw new Error(data.error?.message || 'WhatsApp send failed')
   }
   return data
