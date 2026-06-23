@@ -173,6 +173,7 @@ export default function AdminPage() {
             <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
               <button onClick={()=>router.push('/admin/portfolio')} style={{padding:'8px 16px',borderRadius:'6px',border:'1.5px solid var(--border)',background:'#fff',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'var(--muted)'}}>📸 Portfolio</button>
               <button onClick={()=>window.open('/','_blank')} style={{padding:'8px 16px',borderRadius:'6px',border:'1.5px solid var(--border)',background:'#fff',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'var(--muted)'}}>🌐 Website</button>
+              <button onClick={()=>window.location.href='/api/google/auth'} style={{padding:'8px 16px',borderRadius:'6px',border:'1.5px solid #4285F4',background:'#fff',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'#4285F4'}}>📅 Google Calendar</button>
               <button onClick={logout} style={{padding:'8px 16px',borderRadius:'6px',border:'1.5px solid var(--border)',background:'#fff',fontSize:'11px',fontWeight:600,cursor:'pointer',color:'var(--muted)'}}>🚪 Logout</button>
             </div>
           </div>
