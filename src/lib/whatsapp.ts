@@ -1,7 +1,8 @@
-const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID
-const ACCESS_TOKEN    = process.env.WHATSAPP_ACCESS_TOKEN
+// Read fresh on every call to avoid stale token issues
 
 export async function sendWhatsAppMessage(to: string, message: string) {
+  const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID
+  const ACCESS_TOKEN    = process.env.WHATSAPP_ACCESS_TOKEN
   const phone = to.replace(/[^0-9]/g, '')
   const fullPhone = phone.startsWith('91') ? phone : `91${phone}`
 
