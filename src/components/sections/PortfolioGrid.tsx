@@ -56,7 +56,7 @@ export default function PortfolioGrid() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: i * 0.05 }}
-            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', height: ((p as any).is_tall || (p as any).tall) ? '320px' : '210px' }}
+            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', aspectRatio: '1/1' }}
             onMouseEnter={e => {
               const bg   = e.currentTarget.querySelector('.pi-bg') as HTMLElement
               const over = e.currentTarget.querySelector('.pi-over') as HTMLElement
