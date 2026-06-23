@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useMobile } from '@/context/MobileContext'
 import { motion } from 'framer-motion'
 import { PORTFOLIO_ITEMS } from '@/lib/constants'
 
@@ -18,6 +19,7 @@ interface PortfolioItem {
 }
 
 export default function PortfolioGrid() {
+  const { isMobile } = useMobile()
   
   const [active, setActive]   = useState('All')
   const [dbItems, setDbItems] = useState<PortfolioItem[]>([])
