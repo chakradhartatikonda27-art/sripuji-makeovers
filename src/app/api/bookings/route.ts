@@ -113,6 +113,16 @@ export async function POST(req: NextRequest) {
     console.error('WhatsApp notification failed:', e)
   }
 
+  // Sync to Google Calendar for admin confirmed bookings
+  if (booking.status === 'confirmed') {
+    try {
+      const { syncBookingToCalendar } = await import('@/lib/googleCalendarHelper')
+      await syncBookingToCalendar(booking, 'create')
+    } catch (e) {
+      console.error('Google Calendar sync failed:', e)
+    }
+  }
+
   // Notify artist
   try {
     const artistMsg = `🔔 *New Booking Request!*\n\n👤 ${name}\n💄 ${service}\n📅 ${booking_date} ⏰ ${booking_time}\n📱 ${phone}\n🔖 ${booking.booking_ref}\n\nReply:\n✅ *accept 1* — Confirm\n❌ *reject 1* — Reject`
