@@ -52,13 +52,13 @@ export default function PortfolioGrid() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(3,1fr)' : 'repeat(4,1fr)', gap: '3px', background: '#fff' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap: '4px', background: '#f8f8f8' }}>
         {items.map((p, i) => (
           <motion.div key={i}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: i * 0.05 }}
-            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', aspectRatio: '1/1' }}
+            style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', border: '2px solid #fff', aspectRatio: isMobile ? '3/4' : '1/1' }}
             onMouseEnter={e => {
               const bg   = e.currentTarget.querySelector('.pi-bg') as HTMLElement
               const over = e.currentTarget.querySelector('.pi-over') as HTMLElement
