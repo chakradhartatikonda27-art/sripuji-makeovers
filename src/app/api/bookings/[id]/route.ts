@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
 import { sendWhatsAppMessage, WA_MESSAGES } from '@/lib/whatsapp'
+import { syncBookingToCalendar } from '@/lib/googleCalendarHelper'
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -19,7 +20,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Send WhatsApp on status change
+  // WhatsApp notifications
   try {
     if (body.status === 'confirmed' && data.phone) {
       await sendWhatsAppMessage(data.phone, WA_MESSAGES.bookingConfirmed(
@@ -32,6 +33,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     }
   } catch (e) {
     console.error('WhatsApp notification failed:', e)
+  }
+
+  // Google Calendar sync
+  try {
+    if (body.status === 'confirmed') {
+      const calResult = await syncBookingToCalendar(data, 'create')
+      console.log('Google Calendar sync result:', JSON.stringify(calResult))
+    } else if (body.status === 'cancelled') {
+      await syncBookingToCalendar(data, 'delete')
+    }
+  } catch (e) {
+    console.error('Google Calendar sync failed:', e)
   }
 
   return NextResponse.json({ success: true, booking: data })
