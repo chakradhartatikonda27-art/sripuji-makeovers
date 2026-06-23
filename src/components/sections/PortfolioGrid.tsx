@@ -50,7 +50,7 @@ export default function PortfolioGrid() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '0', border: '2px solid #fff' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(3,1fr)' : 'repeat(4,1fr)', gap: '3px', background: '#fff' }}>
         {items.map((p, i) => (
           <motion.div key={i}
             initial={{ opacity: 0 }}
