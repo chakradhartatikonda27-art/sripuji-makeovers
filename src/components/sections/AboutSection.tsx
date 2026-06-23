@@ -29,9 +29,9 @@ export default function AboutSection() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '32px' : '64px', alignItems: 'center' }}>
 
         <motion.div initial={{ opacity: 0, x: isMobile ? 0 : -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <div style={{ borderRadius: '20px', overflow: 'hidden', aspectRatio: '3/4', background: 'linear-gradient(155deg, var(--coral) 0%, var(--blush3) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ borderRadius: '20px', overflow: 'hidden', aspectRatio: isMobile ? '1/1' : '3/4', background: 'linear-gradient(155deg, var(--coral) 0%, var(--blush3) 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {s.about_photo_url ? (
-              <img src={s.about_photo_url} alt="Sri Pujitha" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={s.about_photo_url} alt="Sri Pujitha" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
             ) : (
               <div style={{ textAlign: 'center', color: '#fff' }}>
                 <div style={{ fontSize: '64px', marginBottom: '12px' }}>👩‍🎨</div>

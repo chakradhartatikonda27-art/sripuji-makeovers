@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { PORTFOLIO_ITEMS } from '@/lib/constants'
 
 
-const CATS = ['All', 'Bridal', 'Engagement', 'Function', 'Photoshoot', 'Groom']
+const CATS = ['All', 'Bridal', 'Engagement', 'Reception', 'Function', 'Half Saree', 'Groom', 'Photoshoot']
 
 interface PortfolioItem {
   id?: string
