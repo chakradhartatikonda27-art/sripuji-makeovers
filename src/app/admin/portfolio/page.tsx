@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import Navbar from '@/components/layout/Navbar'
 
-const CATS = ['Bridal','Engagement','Function','Photoshoot','Groom']
+const CATS = ['Bridal','Engagement','Reception','Function','Half Saree','Groom','Photoshoot']
 
 interface PortfolioItem {
   id: string
@@ -24,7 +24,7 @@ export default function AdminPortfolio() {
   const [loading, setLoading]     = useState(true)
   const [uploading, setUploading] = useState(false)
   const [filter, setFilter]       = useState('All')
-  const [form, setForm]           = useState({ label: '', category: 'Bridal', is_tall: false })
+  const [form, setForm]           = useState({ label: '', category: 'Bridal' })
   const [preview, setPreview]     = useState<string | null>(null)
   const [file, setFile]           = useState<File | null>(null)
 
@@ -64,7 +64,7 @@ export default function AdminPortfolio() {
       if (!res.ok) throw new Error(data.error)
 
       toast.success('Photo uploaded successfully!')
-      setForm({ label: '', category: 'Bridal', is_tall: false })
+      setForm({ label: '', category: 'Bridal' })
       setFile(null)
       setPreview(null)
       if (fileRef.current) fileRef.current.value = ''
