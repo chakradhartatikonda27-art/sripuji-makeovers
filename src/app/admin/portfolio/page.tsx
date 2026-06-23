@@ -12,7 +12,6 @@ interface PortfolioItem {
   label: string
   category: string
   image_url: string
-  is_tall: boolean
   sort_order: number
   created_at: string
 }
@@ -173,10 +172,7 @@ export default function AdminPortfolio() {
                 </select>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', padding: '12px 14px', background: 'var(--blush)', borderRadius: '8px', cursor: 'pointer' }}
-                onClick={() => setForm({ ...form, is_tall: !form.is_tall })}>
-                <div style={{ width: '20px', height: '20px', borderRadius: '4px', border: `2px solid ${form.is_tall ? 'var(--coral)' : 'var(--border2)'}`, background: form.is_tall ? 'var(--coral)' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-                  {form.is_tall && <span style={{ color: '#fff', fontSize: '12px', fontWeight: 700 }}>✓</span>}
+              <div style={{ display: 'none' }}><div>
                 </div>
                 <div>
                   <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--ink)' }}>Tall card</div>
@@ -225,7 +221,7 @@ export default function AdminPortfolio() {
                         <img src={item.image_url} alt={item.label} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                           onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
                           onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')} />
-                        {item.is_tall && (
+                        {false && (
                           <div style={{ position: 'absolute', top: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', color: '#fff', fontSize: '9px', fontWeight: 700, padding: '3px 8px', borderRadius: '4px' }}>TALL</div>
                         )}
                         <div style={{ position: 'absolute', top: '8px', right: '8px', background: 'var(--coral)', color: '#fff', fontSize: '9px', fontWeight: 700, padding: '3px 8px', borderRadius: '4px' }}>{item.category}</div>
