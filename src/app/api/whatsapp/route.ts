@@ -250,7 +250,7 @@ export async function POST(req: NextRequest) {
 
     // HELP
     else {
-      reply = `💄 *Sripuji Makeovers Bot*\n\n*Commands:*\n\n📅 *today* — Today's bookings\n📅 *tomorrow* — Tomorrow\n📅 *week* — This week\n📅 *month* — This month\n📅 *jan / feb / mar...* — Any month\n📅 *july 2027* — Specific month+year\n✅ *confirmed* — All confirmed\n⏳ *pending* — Pending approvals\n📅 *25* — Check date 25\n📅 *25 july* — Check July 25\n✅ *accept 1* — Confirm #1\n❌ *reject 1* — Cancel #1\n🔴 *block 25* — Block date\n🟢 *free 25* — Unblock date\n\n_Type any command!_ 💄`
+      reply = `💄 *Sripuji Makeovers Bot*\n\n*Commands:*\n\n📅 *today* — Today's bookings\n📅 *tomorrow* — Tomorrow\n📅 *week* — This week\n📅 *month* — This month\n📅 *jan / feb / mar...* — Any month\n📅 *july 2027* — Specific month+year\n✅ *confirmed* — All confirmed\n⏳ *pending* — Pending approvals\n📅 *25* — Check date 25\n📅 *25 july* — Check July 25\n✅ *accept 1* — Confirm #1\n❌ *reject 1* — Cancel #1\n🔴 *block 25* — Block June 25\n🔴 *block 25 july* — Block July 25\n🟢 *free 25* — Unblock June 25\n🟢 *free 25 july* — Unblock July 25\n\n_Type any command!_ 💄`
     }
 
     if (reply) await sendWhatsAppMessage(from, reply)
