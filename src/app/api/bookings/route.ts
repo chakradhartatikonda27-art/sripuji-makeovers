@@ -112,6 +112,14 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     console.error('WhatsApp notification failed:', e)
   }
+
+  // Notify artist
+  try {
+    const artistMsg = `🔔 *New Booking Request!*\n\n👤 ${name}\n💄 ${service}\n📅 ${booking_date} ⏰ ${booking_time}\n📱 ${phone}\n🔖 ${booking.booking_ref}\n\nReply:\n✅ *accept 1* — Confirm\n❌ *reject 1* — Reject`
+    await sendWhatsAppMessage('918885397517', artistMsg)
+  } catch (e) {
+    console.error('WhatsApp artist notification failed:', e)
+  }
   return NextResponse.json({ success: true, booking }, { status: 201 })
 }
 
