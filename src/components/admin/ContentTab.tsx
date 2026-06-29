@@ -64,7 +64,7 @@ function HeroGallery() {
 export default function ContentTab() {
   const [settings, setSettings]   = useState<Record<string, string>>({})
   const [tests, setTests]         = useState<Testimonial[]>([])
-  const [section, setSection]     = useState<'hero'|'about'|'services'|'reviews'|'contact'>('hero')
+  const [section, setSection]     = useState<'hero'|'about'|'services'|'reviews'|'contact'|'whychoose'>('hero')
   const [saving, setSaving]       = useState(false)
   const [uploading, setUploading] = useState(false)
   const [newTest, setNewTest]     = useState({ author:'', event:'', text:'', rating:5 })
@@ -129,9 +129,9 @@ export default function ContentTab() {
   return (
     <div>
       <div style={{display:'flex',gap:'8px',flexWrap:'wrap',marginBottom:'20px'}}>
-        {(['hero','about','services','reviews','contact'] as const).map(id=>(
+        {(['hero','about','services','reviews','contact','whychoose'] as const).map(id=>(
           <button key={id} onClick={()=>setSection(id)} style={secStyle(section===id)}>
-            {id==='hero'?'🏠 Hero':id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':'📞 Contact'}
+            {id==='hero'?'🏠 Hero':id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':id==='whychoose'?'✨ Why Choose':'📞 Contact'}
           </button>
         ))}
       </div>
@@ -243,6 +243,30 @@ export default function ContentTab() {
             {saveBtn(['about_tags'])}
           </div>
         </>
+      )}
+
+      {section==='whychoose' && (
+        <div style={card}>
+          <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>✨ Why Choose Us Section</div>
+          <div style={{fontSize:'12px',color:'var(--muted2)',marginBottom:'16px'}}>Edit the 6 reasons shown in the "Why Choose Sri Pujitha" section</div>
+          {[1,2,3,4,5,6].map(n=>(
+            <div key={n} style={{background:'var(--blush)',borderRadius:'10px',padding:'14px',marginBottom:'12px'}}>
+              <div style={{display:'grid',gridTemplateColumns:'60px 1fr',gap:'10px',marginBottom:'8px'}}>
+                <div>
+                  <label style={lbl}>Icon</label>
+                  <input value={settings[`why_icon${n}`]||''} onChange={e=>set(`why_icon${n}`,e.target.value)} style={{...inp,fontSize:'20px',textAlign:'center' as const}} placeholder="🎨"/>
+                </div>
+                <div>
+                  <label style={lbl}>Title</label>
+                  <input value={settings[`why_title${n}`]||''} onChange={e=>set(`why_title${n}`,e.target.value)} style={inp} placeholder="A Vision for Every Face"/>
+                </div>
+              </div>
+              <label style={lbl}>Description</label>
+              <textarea value={settings[`why_desc${n}`]||''} onChange={e=>set(`why_desc${n}`,e.target.value)} rows={2} style={{...inp,resize:'vertical' as const}} placeholder="Every look is crafted..."/>
+            </div>
+          ))}
+          {saveBtn(['why_icon1','why_title1','why_desc1','why_icon2','why_title2','why_desc2','why_icon3','why_title3','why_desc3','why_icon4','why_title4','why_desc4','why_icon5','why_title5','why_desc5','why_icon6','why_title6','why_desc6'])}
+        </div>
       )}
 
       {section==='services' && (

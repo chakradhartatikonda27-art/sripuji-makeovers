@@ -1,15 +1,28 @@
 'use client'
+import React from 'react'
 import { motion } from 'framer-motion'
 
 export default function WhyChooseSection() {
-  const reasons = [
-    { icon:'🎨', title:'A Vision for Every Face', desc:'Every look is crafted to honour your features and personality — never templated, always tailored.' },
-    { icon:'💄', title:'Only Premium Products', desc:'From NARS to Huda Beauty and MAC — your skin touches nothing but 100% genuine international brands.' },
-    { icon:'📸', title:'Camera-Ready Perfection', desc:'Every finish is designed to look flawless from the mandap to the last candid photograph.' },
-    { icon:'🕊️', title:'Calm & On Time', desc:'Sri Pujitha brings a composed, unhurried presence to your event morning — so you can simply enjoy it.' },
-    { icon:'⭐', title:'500+ Brides Transformed', desc:'Hundreds of brides across Rajahmundry & East Godavari have trusted us with their most important look.' },
-    { icon:'✨', title:'Your Style, Elevated', desc:'We listen, we understand, and we create — always you, just your most beautiful self.' },
-  ]
+  const [settings, setSettings] = React.useState<Record<string,string>>({
+    why_icon1:'🎨', why_title1:'A Vision for Every Face', why_desc1:'Every look is crafted to honour your features and personality — never templated, always tailored.',
+    why_icon2:'💄', why_title2:'Only Premium Products', why_desc2:'From NARS to Huda Beauty and MAC — your skin touches nothing but 100% genuine international brands.',
+    why_icon3:'📸', why_title3:'Camera-Ready Perfection', why_desc3:'Every finish is designed to look flawless from the mandap to the last candid photograph.',
+    why_icon4:'🕊️', why_title4:'Calm & On Time', why_desc4:"Sri Pujitha brings a composed, unhurried presence to your event morning — so you can simply enjoy it.",
+    why_icon5:'⭐', why_title5:'500+ Brides Transformed', why_desc5:'Hundreds of brides across Rajahmundry & East Godavari have trusted us with their most important look.',
+    why_icon6:'✨', why_title6:'Your Style, Elevated', why_desc6:'We listen, we understand, and we create — always you, just your most beautiful self.',
+  })
+
+  React.useEffect(() => {
+    fetch('/api/site-settings').then(r => r.json())
+      .then(d => { if (d && !d.error) setSettings(prev => ({ ...prev, ...d })) })
+      .catch(() => {})
+  }, [])
+
+  const reasons = [1,2,3,4,5,6].map(n => ({
+    icon: settings[`why_icon${n}`] || '',
+    title: settings[`why_title${n}`] || '',
+    desc: settings[`why_desc${n}`] || '',
+  }))
   return (
     <>
       <style>{`
