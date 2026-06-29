@@ -105,7 +105,7 @@ export default function HeroSection() {
           color: #F0635A;
         }
         .hero-h1 {
-          font-size: clamp(28px, 6vw, 68px);
+          font-size: clamp(24px, 5vw, 68px);
           font-weight: 800;
           color: #ffffff;
           line-height: 1.1;
@@ -115,7 +115,7 @@ export default function HeroSection() {
         }
         .hero-h1 span { color: #F0635A; }
         .hero-sub {
-          font-size: clamp(14px, 2vw, 18px);
+          font-size: clamp(12px, 1.8vw, 16px);
           color: rgba(255,255,255,0.9);
           margin-bottom: 36px;
           font-style: italic;
