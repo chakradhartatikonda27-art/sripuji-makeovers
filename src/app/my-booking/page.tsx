@@ -93,7 +93,7 @@ export default function MyBookingPage() {
   }
 
   const sc = booking ? statusConfig[booking.status] || statusConfig.pending : null
-  const canModify = booking && ['pending','confirmed'].includes(booking.status)
+  const canModify = false // Disabled — contact artist to modify
   const inp = { width:'100%', padding:'12px 14px', border:'1.5px solid var(--border)', borderRadius:'8px', fontSize:'14px', fontFamily:'inherit', outline:'none', background:'var(--bg)', color:'var(--ink)', transition:'border-color 0.2s' } as any
 
   return (

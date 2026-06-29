@@ -196,6 +196,7 @@ export default function HeroSection() {
         }
         @media (max-width: 768px) {
           .hero-h1 { font-size: 18px !important; line-height: 1.2 !important; }
+<<<<<<< HEAD
           .hero-sub { font-size: 11px !important; margin-bottom: 20px !important; }
           .hero-content { padding: 70px 16px 40px !important; }
           .hero-badge { margin-bottom: 10px !important; padding: 4px 12px !important; }
@@ -207,6 +208,19 @@ export default function HeroSection() {
             font-size: 13px !important;
           }
           .hero-stats { gap: 12px !important; padding-top: 16px !important; margin-top: 0 !important; }
+=======
+          .hero-sub { font-size: 11px !important; margin-bottom: 16px !important; }
+          .hero-content { padding: 70px 16px 40px !important; }
+          .hero-badge { margin-bottom: 10px !important; padding: 4px 12px !important; }
+          .hero-btns { gap: 8px !important; margin-bottom: 20px !important; }
+          .hero-btn-primary, .hero-btn-secondary {
+            min-width: unset !important;
+            width: auto !important;
+            padding: 10px 20px !important;
+            font-size: 12px !important;
+          }
+          .hero-stats { gap: 12px !important; padding-top: 16px !important; }
+>>>>>>> ui-v3
           .hero-stat-num { font-size: 16px !important; }
           .hero-stat-lbl { font-size: 7px !important; }
           .hero-dots { margin-top: 12px !important; }
