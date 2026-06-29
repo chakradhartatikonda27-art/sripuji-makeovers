@@ -29,7 +29,6 @@ export default function AboutPage() {
         <section style={{ background: 'var(--blush)', padding: '32px 6%', borderBottom: '1px solid var(--border)' }}>
           <div style={{ maxWidth: '480px', margin: '0 auto' }}>
             <div style={{ background: 'linear-gradient(145deg, #FFF5F4 0%, #fff 60%)', borderRadius: '24px', padding: '24px', border: '1px solid rgba(240,99,90,0.15)', boxShadow: '0 24px 64px rgba(240,99,90,0.12)' }}>
-              {/* Profile */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', padding: '14px', background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
                 <div style={{ width: 52, height: 52, borderRadius: '12px', overflow: 'hidden', background: 'var(--blush)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {s.about_photo_url
@@ -38,11 +37,10 @@ export default function AboutPage() {
                 </div>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--ink)' }}>{s.hero_name}</div>
-                  <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--coral)', marginTop: '3px' }}>Professional Makeup Artist</div>
+                  <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase' as const, color: 'var(--coral)', marginTop: '3px' }}>Professional Makeup Artist</div>
                   <div style={{ fontSize: '11px', color: 'var(--muted2)', marginTop: '3px' }}>📍 {s.hero_availability}</div>
                 </div>
               </div>
-              {/* Available */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '11px 14px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '10px', marginBottom: '12px' }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)', flexShrink: 0 }} />
                 <div>
@@ -50,9 +48,8 @@ export default function AboutPage() {
                   <div style={{ fontSize: '10px', color: '#166534' }}>{s.hero_availability}</div>
                 </div>
               </div>
-              {/* Brands */}
               <div style={{ padding: '12px 14px', background: '#fff', borderRadius: '10px', marginBottom: '14px', border: '1px solid var(--border)' }}>
-                <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted2)', marginBottom: '8px' }}>Premium Products Used</div>
+                <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase' as const, color: 'var(--muted2)', marginBottom: '8px' }}>Premium Products Used</div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                   {brands.slice(0, 6).map(b => (
                     <span key={b} style={{ padding: '3px 9px', background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '50px', fontSize: '10px', fontWeight: 600, color: 'var(--coral)' }}>{b}</span>
@@ -60,8 +57,7 @@ export default function AboutPage() {
                   {brands.length > 6 && <span style={{ padding: '3px 9px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '50px', fontSize: '10px', fontWeight: 600, color: 'var(--muted2)' }}>+{brands.length - 6}</span>}
                 </div>
               </div>
-              {/* CTA */}
-              <Link href="/booking" style={{ display: 'block', width: '100%', padding: '13px', background: 'var(--coral)', color: '#fff', borderRadius: '12px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center', boxShadow: '0 4px 16px rgba(240,99,90,0.3)' }}>
+              <Link href="/booking" style={{ display: 'block', width: '100%', padding: '13px', background: 'var(--coral)', color: '#fff', borderRadius: '12px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center' as const, boxShadow: '0 4px 16px rgba(240,99,90,0.3)' }}>
                 📅 Book Your Appointment
               </Link>
             </div>
