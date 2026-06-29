@@ -2,14 +2,14 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { NAV_LINKS, SITE } from '@/lib/constants'
+import { NAV_LINKS } from '@/lib/constants'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen]         = useState(false)
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -17,7 +17,10 @@ export default function Navbar() {
     window.addEventListener('resize', checkMobile)
     const fn = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', fn)
-    return () => { window.removeEventListener('resize', checkMobile); window.removeEventListener('scroll', fn) }
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+      window.removeEventListener('scroll', fn)
+    }
   }, [])
 
   useEffect(() => { setOpen(false) }, [pathname])
@@ -26,22 +29,24 @@ export default function Navbar() {
     <>
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 999,
-        height: '68px',
-        background: 'rgba(255,255,255,0.97)',
-        backdropFilter: 'blur(20px)',
+        height: '68px', display: 'flex', alignItems: 'center',
+        justifyContent: 'space-between', padding: '0 5%',
+        background: scrolled ? 'rgba(255,255,255,0.97)' : '#fff',
+        backdropFilter: 'blur(12px)',
         borderBottom: '1px solid var(--border)',
-        transition: 'all 0.3s ease',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 5%',
+        boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.08)' : 'none',
+        transition: 'all 0.3s',
       }}>
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: 'none', flexShrink: 0 }}>
-          <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ fontSize: '18px', fontWeight: 800, letterSpacing: '-0.5px', color: 'var(--ink)', lineHeight: 1 }}>
             Sripuji <span style={{ color: 'var(--coral)' }}>Makeovers</span>
           </div>
-          <div style={{ fontSize: '7px', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted2)', display: isMobile ? 'none' : 'block' }}>
-            Professional Makeup Artist · Rajahmundry
-          </div>
+          {!isMobile && (
+            <div style={{ fontSize: '7px', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted2)' }}>
+              Professional Makeup Artist · Rajahmundry
+            </div>
+          )}
         </Link>
 
         {/* Desktop nav */}
@@ -63,28 +68,26 @@ export default function Navbar() {
           </ul>
         )}
 
-        {/* Right */}
+        {/* Right side */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {!isMobile && (
             <>
-            <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
-            <Link href="/booking" style={{
-              padding: '9px 20px', background: 'var(--coral)', color: '#fff',
-              borderRadius: '50px', fontSize: '12px', fontWeight: 700,
-              textDecoration: 'none', boxShadow: '0 4px 14px rgba(240,99,90,0.3)',
-            }}>
-              BOOK NOW
-            </Link>
+              <a href="tel:+918885397517" style={{ fontSize:'12px', fontWeight:700, color:'var(--coral)', textDecoration:'none', display:'flex', alignItems:'center', gap:'4px', whiteSpace:'nowrap' }}>
+                📞 +91 88853 97517
+              </a>
+              <Link href="/booking" style={{ padding:'9px 20px', background:'var(--coral)', color:'#fff', borderRadius:'50px', fontSize:'12px', fontWeight:700, textDecoration:'none', boxShadow:'0 4px 14px rgba(240,99,90,0.3)' }}>
+                BOOK NOW
+              </Link>
             </>
           )}
+
           {isMobile && (
             <>
-            <Link href="/booking" style={{
-                padding: '8px 16px', background: 'var(--coral)', color: '#fff',
-                borderRadius: '50px', fontSize: '11px', fontWeight: 700, textDecoration: 'none',
-              }}>Book</Link>
+              <Link href="/booking" style={{ padding:'8px 16px', background:'var(--coral)', color:'#fff', borderRadius:'50px', fontSize:'11px', fontWeight:700, textDecoration:'none' }}>
+                Book
+              </Link>
               <button onClick={() => setOpen(!open)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px', display: 'flex', alignItems: 'center' }}>
+                style={{ background:'none', border:'none', cursor:'pointer', padding:'6px', display:'flex', alignItems:'center' }}>
                 {open
                   ? <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth="2.5" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   : <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth="2.5" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
@@ -98,27 +101,22 @@ export default function Navbar() {
       {/* Mobile menu */}
       <AnimatePresence>
         {open && isMobile && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}
-            style={{ position: 'fixed', top: '68px', left: 0, right: 0, zIndex: 998, background: '#fff', borderBottom: '1px solid var(--border)', padding: '16px 5% 24px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+          <motion.div initial={{ opacity:0, y:-10 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-10 }} transition={{ duration:0.2 }}
+            style={{ position:'fixed', top:'68px', left:0, right:0, zIndex:998, background:'#fff', borderBottom:'1px solid var(--border)', padding:'16px 5% 24px', boxShadow:'0 8px 32px rgba(0,0,0,0.1)' }}>
             {NAV_LINKS.map((link, i) => (
-              <motion.div key={link.href} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
+              <motion.div key={link.href} initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay:i*0.05 }}>
                 <Link href={link.href} onClick={() => setOpen(false)}
-                  style={{ display: 'block', padding: '13px 0', fontSize: '16px', fontWeight: pathname === link.href ? 700 : 500, color: pathname === link.href ? 'var(--coral)' : 'var(--ink)', textDecoration: 'none', borderBottom: '1px solid var(--border)' }}>
+                  style={{ display:'block', padding:'12px 0', fontSize:'15px', fontWeight:600, color: pathname === link.href ? 'var(--coral)' : 'var(--ink)', textDecoration:'none', borderBottom:'1px solid var(--border)' }}>
                   {link.label}
                 </Link>
               </motion.div>
             ))}
-            <div style={{ marginTop: '16px', display: 'flex', gap: '10px' }}>
-              <a href={`https://wa.me/${SITE.phone.replace('+','')}`} target="_blank" rel="noopener"
-                style={{ flex: 1, padding: '12px', background: '#25D366', color: '#fff', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
-                💬 WhatsApp
-              </a>
-              <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
-            <Link href="/booking" onClick={() => setOpen(false)}
-                style={{ flex: 1, padding: '12px', background: 'var(--coral)', color: '#fff', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
-                📅 Book Now
-              </Link>
-            </div>
+            <a href="tel:+918885397517" style={{ display:'block', marginTop:'16px', padding:'12px 0', fontSize:'15px', fontWeight:700, color:'var(--coral)', textDecoration:'none' }}>
+              📞 +91 88853 97517
+            </a>
+            <a href="https://wa.me/918885397517" target="_blank" rel="noopener" style={{ display:'block', marginTop:'8px', padding:'12px 20px', background:'#25D366', color:'#fff', borderRadius:'8px', fontSize:'14px', fontWeight:700, textDecoration:'none', textAlign:'center' }}>
+              💬 WhatsApp Us
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

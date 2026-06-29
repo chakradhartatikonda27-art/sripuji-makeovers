@@ -235,14 +235,7 @@ export default function HeroSection() {
             </a>
           </div>
 
-          <div className="hero-stats">
-            {[{ n:'500+', l:'Brides' }, { n:'11+', l:'Services' }, { n:'5.0⭐', l:'Rating' }, { n:'3+', l:'Years' }].map(k => (
-              <div key={k.l} style={{ textAlign:'center' }}>
-                <div className="hero-stat-num">{k.n}</div>
-                <div className="hero-stat-lbl">{k.l}</div>
-              </div>
-            ))}
-          </div>
+
 
           {gallery.length > 1 && (
             <div className="hero-dots">
