@@ -79,7 +79,6 @@ export default function Navbar() {
           )}
           {isMobile && (
             <>
-              <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
             <Link href="/booking" style={{
                 padding: '8px 16px', background: 'var(--coral)', color: '#fff',
                 borderRadius: '50px', fontSize: '11px', fontWeight: 700, textDecoration: 'none',
