@@ -202,9 +202,9 @@ export default function HeroSection() {
           .hero-btns { gap: 8px !important; margin-bottom: 20px !important; }
           .hero-btn-primary, .hero-btn-secondary {
             min-width: unset !important;
-            width: 100% !important;
-            padding: 12px 16px !important;
-            font-size: 13px !important;
+            width: auto !important;
+            padding: 10px 20px !important;
+            font-size: 12px !important;
           }
           .hero-stats { gap: 12px !important; padding-top: 16px !important; }
           .hero-stat-num { font-size: 16px !important; }
