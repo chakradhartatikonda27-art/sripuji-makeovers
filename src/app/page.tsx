@@ -3,6 +3,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
 import TickerSection from '@/components/sections/TickerSection'
+import WhyChooseSection from '@/components/sections/WhyChooseSection'
 import AboutSection from '@/components/sections/AboutSection'
 import ServicesGrid from '@/components/sections/ServicesGrid'
 import BrandsSection from '@/components/sections/BrandsSection'
@@ -16,7 +17,8 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <TickerSection />
-        <AboutSection />
+        <WhyChooseSection />
+      <AboutSection />
         <section style={{ background: 'var(--bg)', padding: '96px 6%' }}>
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: '48px' }}>

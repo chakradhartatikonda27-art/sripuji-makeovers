@@ -1,264 +1,287 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useMobile } from '@/context/MobileContext'
 
 export default function HeroSection() {
-  const { isMobile } = useMobile()
-  const [s, setS] = useState<Record<string, string>>({
-    hero_name:        'Sri Pujitha',
-    hero_title:       'Makeup Artist',
-    hero_quote:       'Where every bride feels beautifully herself.',
-    hero_description: 'Specialising in glamorous, minimalistic & smokey-eyed bridal looks. 100% genuine premium international products. Travels to your venue across Rajahmundry & East Godavari.',
-    hero_availability:'Rajahmundry & East Godavari',
-    hero_brands:      'NARS,Huda Beauty,MAC,Fenty,Bobbi Brown,Tarte,Laura Mercier,Inglot',
-    hero_stat1: '500+', hero_stat1_lbl: 'Brides',
-    hero_stat2: '11+',  hero_stat2_lbl: 'Services',
-    hero_stat3: '100%', hero_stat3_lbl: 'Premium Kit',
-    hero_stat4: '✈️',   hero_stat4_lbl: 'Travels',
-    about_photo_url:  '',
-    contact_whatsapp: '918885397517',
-  })
+  const [gallery, setGallery] = useState<string[]>([])
+  const [currentPhoto, setCurrentPhoto] = useState(0)
+  const [whatsapp, setWhatsapp] = useState('918885397517')
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
     fetch('/api/site-settings').then(r => r.json())
-      .then(d => { if (d && !d.error) setS(prev => ({ ...prev, ...d })) })
+      .then(d => { if (d?.contact_whatsapp) setWhatsapp(d.contact_whatsapp) })
+      .catch(() => {})
+    fetch('/api/hero-gallery').then(r => r.json())
+      .then(d => { if (Array.isArray(d) && d.length > 0) setGallery(d) })
       .catch(() => {})
   }, [])
 
-  const brands = (s.hero_brands || '').split(',').filter(Boolean).map(b => b.trim())
-  const stats = [
-    { n: s.hero_stat1, l: s.hero_stat1_lbl },
-    { n: s.hero_stat2, l: s.hero_stat2_lbl },
-    { n: s.hero_stat3, l: s.hero_stat3_lbl },
-    { n: s.hero_stat4, l: s.hero_stat4_lbl },
-  ]
+  useEffect(() => {
+    if (gallery.length <= 1) return
+    const t = setInterval(() => setCurrentPhoto(p => (p + 1) % gallery.length), 5000)
+    return () => clearInterval(t)
+  }, [gallery])
+
+  const heroImg = gallery[currentPhoto] || ''
 
   return (
-    <section style={{
-      background: '#fff',
-      padding: isMobile ? '24px 5% 36px' : '80px 6% 64px',
-      borderBottom: '1px solid var(--border)',
-      overflow: 'hidden',
-      position: 'relative',
-      marginTop: '68px',
-    }}>
+    <>
+      <style>{`
+        .hero-section {
+          position: relative;
+          width: 100%;
+          min-height: 100svh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+        }
+        .hero-bg {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, #2d0a10 0%, #6b1a28 50%, #2d0a10 100%);
+          z-index: 0;
+        }
+        .hero-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 20%;
+          z-index: 0;
+          transition: opacity 1s ease;
+        }
+        .hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to bottom,
+            rgba(0,0,0,0.2) 0%,
+            rgba(0,0,0,0.5) 50%,
+            rgba(0,0,0,0.75) 100%
+          );
+          z-index: 1;
+        }
+        .hero-accent {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: var(--coral);
+          z-index: 3;
+        }
+        .hero-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          width: 100%;
+          max-width: 900px;
+          padding: 100px 24px 80px;
+        }
+        .hero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(240,99,90,0.2);
+          border: 1px solid rgba(240,99,90,0.5);
+          border-radius: 50px;
+          padding: 6px 20px;
+          margin-bottom: 20px;
+        }
+        .hero-badge span {
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: var(--coral);
+        }
+        .hero-h1 {
+          font-size: clamp(28px, 6vw, 68px);
+          font-weight: 800;
+          color: #fff;
+          line-height: 1.1;
+          letter-spacing: -1.5px;
+          margin-bottom: 16px;
+          text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+        }
+        .hero-h1 span { color: var(--coral); }
+        .hero-sub {
+          font-size: clamp(14px, 2vw, 18px);
+          color: rgba(255,255,255,0.85);
+          margin-bottom: 36px;
+          font-style: italic;
+          line-height: 1.6;
+        }
+        .hero-btns {
+          display: flex;
+          gap: 14px;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-bottom: 48px;
+        }
+        .hero-btn-primary {
+          padding: 15px 36px;
+          background: var(--coral);
+          color: #fff;
+          border-radius: 50px;
+          font-size: 14px;
+          font-weight: 700;
+          text-decoration: none;
+          box-shadow: 0 8px 32px rgba(240,99,90,0.45);
+          min-width: 200px;
+          text-align: center;
+          display: inline-block;
+        }
+        .hero-btn-secondary {
+          padding: 15px 36px;
+          background: rgba(255,255,255,0.12);
+          backdrop-filter: blur(10px);
+          color: #fff;
+          border-radius: 50px;
+          font-size: 14px;
+          font-weight: 700;
+          text-decoration: none;
+          border: 1.5px solid rgba(255,255,255,0.35);
+          min-width: 200px;
+          text-align: center;
+          display: inline-block;
+        }
+        .hero-stats {
+          display: flex;
+          justify-content: center;
+          gap: clamp(16px, 5vw, 56px);
+          padding-top: 28px;
+          border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero-stat-num {
+          font-size: clamp(18px, 4vw, 28px);
+          font-weight: 800;
+          color: #fff;
+          line-height: 1;
+        }
+        .hero-stat-lbl {
+          font-size: 8px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.6);
+          margin-top: 4px;
+        }
+        .hero-dots {
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 24px;
+        }
+        .hero-dot {
+          height: 6px;
+          border-radius: 3px;
+          background: rgba(255,255,255,0.4);
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+        .hero-dot.active {
+          width: 20px !important;
+          background: var(--coral) !important;
+        }
+        .hero-scroll {
+          position: absolute;
+          bottom: 28px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+        }
+        .hero-scroll span {
+          font-size: 9px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
+        }
+        .hero-scroll-line {
+          width: 1px;
+          height: 40px;
+          background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+        }
+        @media (max-width: 768px) {
+          .hero-content { padding: 110px 20px 90px; }
+          .hero-btn-primary, .hero-btn-secondary { min-width: 160px; padding: 13px 24px; }
+          .hero-scroll { display: none; }
+        }
+      `}</style>
 
-      {/* Background decorations - desktop only */}
-      {!isMobile && <>
-        <div style={{
-          position: 'absolute', top: '-80px', right: '-80px',
-          width: '400px', height: '400px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(240,99,90,0.08) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', bottom: '-40px', left: '-60px',
-          width: '300px', height: '300px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(240,99,90,0.05) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-      </>}
+      <section className="hero-section">
+        {heroImg ? (
+          <img src={heroImg} alt="Bridal Makeup" className="hero-img" />
+        ) : (
+          <div className="hero-bg" />
+        )}
+        <div className="hero-overlay" />
+        <div className="hero-accent" />
 
-      <div style={{
-        maxWidth: '1200px', margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : '1fr 400px',
-        gap: isMobile ? '32px' : '60px',
-        alignItems: 'center',
-        position: 'relative', zIndex: 1,
-      }}>
+        <motion.div
+          className="hero-content"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div className="hero-badge" initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.2 }}>
+            <span>Sripuji Makeovers · Rajahmundry</span>
+          </motion.div>
 
-        {/* LEFT */}
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <motion.h1 className="hero-h1" initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}>
+            Rajahmundry&apos;s Most Trusted<br />
+            <span>Bridal Makeup Artist</span>
+          </motion.h1>
 
-          {/* Eyebrow */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <div style={{ width: '24px', height: '2px', background: 'var(--coral)', borderRadius: '2px' }} />
-            <span style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: 'var(--coral)' }}>
-              Sripuji Makeovers
-            </span>
-          </div>
+          <motion.p className="hero-sub" initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.5 }}>
+            Because every bride deserves to feel breathtaking.
+          </motion.p>
 
-          {/* Name & Title */}
-          <h1 style={{
-            fontSize: isMobile ? '38px' : 'clamp(44px,5.5vw,68px)',
-            fontWeight: 800, letterSpacing: '-2px', color: 'var(--ink)',
-            lineHeight: 1, marginBottom: '4px',
-          }}>
-            {s.hero_name}
-          </h1>
-          <h2 style={{
-            fontSize: isMobile ? '34px' : 'clamp(40px,5vw,62px)',
-            fontWeight: 800, letterSpacing: '-2px', color: 'var(--coral)',
-            lineHeight: 1, marginBottom: isMobile ? '16px' : '24px',
-          }}>
-            {s.hero_title}
-          </h2>
-
-          {/* Quote */}
-          <p style={{
-            fontSize: isMobile ? '14px' : '17px',
-            fontFamily: 'var(--font-playfair)', fontStyle: 'italic',
-            color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.6,
-          }}>
-            "{s.hero_quote}"
-          </p>
-
-          {/* Description */}
-          <p style={{
-            fontSize: isMobile ? '13px' : '14px',
-            color: 'var(--muted2)', lineHeight: 1.85,
-            marginBottom: isMobile ? '24px' : '32px',
-          }}>
-            {s.hero_description}
-          </p>
-
-          {/* Buttons */}
-          <div style={{
-            display: 'flex', gap: '10px',
-            flexDirection: isMobile ? 'column' : 'row',
-            marginBottom: isMobile ? '28px' : '36px',
-          }}>
-            <Link href="/booking" style={{
-              padding: isMobile ? '13px 24px' : '14px 28px',
-              background: 'var(--coral)', color: '#fff',
-              borderRadius: '50px', fontSize: '13px', fontWeight: 700,
-              textDecoration: 'none', textAlign: 'center',
-              boxShadow: '0 6px 24px rgba(240,99,90,0.35)',
-              display: 'block',
-            }}>
-              📅 Book Appointment
+          <motion.div className="hero-btns" initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.6 }}>
+            <Link href="/booking" className="hero-btn-primary">
+              📅 Book a Consultation
             </Link>
-            <Link href="/services" style={{
-              padding: isMobile ? '13px 24px' : '14px 28px',
-              background: '#fff', color: 'var(--ink)',
-              borderRadius: '50px', fontSize: '13px', fontWeight: 700,
-              textDecoration: 'none', textAlign: 'center',
-              border: '2px solid var(--border)',
-              display: 'block',
-            }}>
-              View Services
-            </Link>
-            <a href={`https://wa.me/${s.contact_whatsapp}`} target="_blank" rel="noopener"
-              style={{
-                padding: isMobile ? '13px 24px' : '14px 28px',
-                background: '#fff', color: '#25D366',
-                borderRadius: '50px', fontSize: '13px', fontWeight: 700,
-                textDecoration: 'none', textAlign: 'center',
-                border: '2px solid #25D366',
-                display: 'flex', alignItems: 'center',
-                justifyContent: 'center', gap: '6px',
-              }}>
-              💬 WhatsApp
+            <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener" className="hero-btn-secondary">
+              💬 WhatsApp Us
             </a>
-          </div>
+          </motion.div>
 
-          {/* Stats */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)',
-            gap: '8px',
-          }}>
-            {stats.map(k => (
-              <div key={k.l} style={{
-                textAlign: 'center',
-                padding: isMobile ? '12px 8px' : '14px 8px',
-                background: 'var(--blush)', borderRadius: '12px',
-                border: '1px solid var(--blush3)',
-              }}>
-                <div style={{ fontSize: isMobile ? '18px' : '22px', fontWeight: 800, color: 'var(--coral)', letterSpacing: '-0.5px', lineHeight: 1 }}>{k.n}</div>
-                <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--muted2)', marginTop: '4px' }}>{k.l}</div>
+          <motion.div className="hero-stats" initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.8 }}>
+            {[{ n:'500+', l:'Brides' }, { n:'11+', l:'Services' }, { n:'5.0⭐', l:'Rating' }, { n:'3+', l:'Years' }].map(k => (
+              <div key={k.l} style={{ textAlign:'center' }}>
+                <div className="hero-stat-num">{k.n}</div>
+                <div className="hero-stat-lbl">{k.l}</div>
               </div>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Mobile trust badges */}
-          {isMobile && (
-            <div style={{ display: 'flex', gap: '8px', marginTop: '16px', flexWrap: 'wrap' }}>
-              {['⭐ 5.0 Rating', '📍 Travels to Venue', '💄 Premium Kit'].map(badge => (
-                <span key={badge} style={{
-                  padding: '5px 12px', background: '#fff',
-                  border: '1px solid var(--border)', borderRadius: '50px',
-                  fontSize: '11px', fontWeight: 600, color: 'var(--muted)',
-                }}>{badge}</span>
+          {isMounted && gallery.length > 1 && (
+            <div className="hero-dots">
+              {gallery.map((_, i) => (
+                <div key={i} onClick={() => setCurrentPhoto(i)}
+                  className={`hero-dot${i===currentPhoto?' active':''}`}
+                  style={{ width: i===currentPhoto ? '20px' : '6px' }}
+                />
               ))}
             </div>
           )}
         </motion.div>
 
-        {/* RIGHT CARD — desktop only */}
-        {!isMobile && (
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.15 }}>
-            <div style={{
-              background: 'linear-gradient(145deg, #FFF5F4 0%, #fff 60%)',
-              borderRadius: '24px', padding: '24px',
-              border: '1px solid rgba(240,99,90,0.15)',
-              boxShadow: '0 24px 64px rgba(240,99,90,0.12), 0 4px 16px rgba(0,0,0,0.04)',
-            }}>
-              {/* Profile */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '14px',
-                marginBottom: '14px', padding: '14px',
-                background: '#fff', borderRadius: '14px',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-              }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: '12px',
-                  overflow: 'hidden', background: 'var(--blush)',
-                  flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {s.about_photo_url ? (
-                    <img src={s.about_photo_url} alt="Sri Pujitha" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : <span style={{ fontSize: '26px' }}>💄</span>}
-                </div>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: 'var(--ink)' }}>{s.hero_name}</div>
-                  <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--coral)', marginTop: '3px' }}>Professional Makeup Artist</div>
-                  <div style={{ fontSize: '11px', color: 'var(--muted2)', marginTop: '3px' }}>📍 {s.hero_availability}</div>
-                </div>
-              </div>
-
-              {/* Available */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '11px 14px', background: '#F0FDF4',
-                border: '1px solid #BBF7D0', borderRadius: '10px', marginBottom: '12px',
-              }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 0 3px rgba(34,197,94,0.2)', flexShrink: 0 }} />
-                <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#15803D' }}>Available for Bookings</div>
-                  <div style={{ fontSize: '10px', color: '#166534' }}>{s.hero_availability}</div>
-                </div>
-              </div>
-
-              {/* Brands */}
-              <div style={{ padding: '12px 14px', background: '#fff', borderRadius: '10px', marginBottom: '14px', border: '1px solid var(--border)' }}>
-                <div style={{ fontSize: '8px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--muted2)', marginBottom: '8px' }}>Premium Products Used</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-                  {brands.slice(0,6).map(b => (
-                    <span key={b} style={{ padding: '3px 9px', background: 'var(--blush)', border: '1px solid var(--blush3)', borderRadius: '50px', fontSize: '10px', fontWeight: 600, color: 'var(--coral)' }}>{b}</span>
-                  ))}
-                  {brands.length > 6 && <span style={{ padding: '3px 9px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '50px', fontSize: '10px', fontWeight: 600, color: 'var(--muted2)' }}>+{brands.length - 6}</span>}
-                </div>
-              </div>
-
-              {/* CTA */}
-              <Link href="/booking" style={{
-                display: 'block', width: '100%', padding: '13px',
-                background: 'var(--coral)', color: '#fff',
-                borderRadius: '12px', fontSize: '13px', fontWeight: 700,
-                textDecoration: 'none', textAlign: 'center',
-                boxShadow: '0 4px 16px rgba(240,99,90,0.3)',
-              }}>
-                📅 Book Your Appointment
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </section>
+        <div className="hero-scroll">
+          <span>Scroll</span>
+          <div className="hero-scroll-line" />
+        </div>
+      </section>
+    </>
   )
 }

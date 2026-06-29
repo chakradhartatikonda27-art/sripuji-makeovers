@@ -66,6 +66,8 @@ export default function Navbar() {
         {/* Right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {!isMobile && (
+            <>
+            <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
             <Link href="/booking" style={{
               padding: '9px 20px', background: 'var(--coral)', color: '#fff',
               borderRadius: '50px', fontSize: '12px', fontWeight: 700,
@@ -73,10 +75,12 @@ export default function Navbar() {
             }}>
               BOOK NOW
             </Link>
+            </>
           )}
           {isMobile && (
             <>
-              <Link href="/booking" style={{
+              <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
+            <Link href="/booking" style={{
                 padding: '8px 16px', background: 'var(--coral)', color: '#fff',
                 borderRadius: '50px', fontSize: '11px', fontWeight: 700, textDecoration: 'none',
               }}>Book</Link>
@@ -110,7 +114,8 @@ export default function Navbar() {
                 style={{ flex: 1, padding: '12px', background: '#25D366', color: '#fff', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
                 💬 WhatsApp
               </a>
-              <Link href="/booking" onClick={() => setOpen(false)}
+              <a href="tel:+918885397517" style={{fontSize:'12px',fontWeight:700,color:'var(--coral)',textDecoration:'none',marginRight:'8px',display:'flex',alignItems:'center',gap:'4px',whiteSpace:'nowrap'}}>📞 +91 88853 97517</a>
+            <Link href="/booking" onClick={() => setOpen(false)}
                 style={{ flex: 1, padding: '12px', background: 'var(--coral)', color: '#fff', borderRadius: '10px', fontSize: '13px', fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>
                 📅 Book Now
               </Link>

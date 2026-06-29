@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 
 import { useEffect, useState, useRef } from 'react'
 import toast from 'react-hot-toast'
@@ -10,6 +11,54 @@ interface Testimonial {
   text: string
   rating: number
   is_active: boolean
+}
+
+
+function HeroGallery() {
+  const [photos, setPhotos] = React.useState<string[]>([])
+  const [uploading, setUploading] = React.useState(false)
+  const fileRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    fetch('/api/hero-gallery').then(r => r.json()).then(setPhotos).catch(() => {})
+  }, [])
+
+  async function upload(file: File) {
+    setUploading(true)
+    const fd = new FormData()
+    fd.append('file', file)
+    const res = await fetch('/api/hero-gallery', { method: 'POST', body: fd })
+    const data = await res.json()
+    if (res.ok) { setPhotos(p => [...p, data.url]); toast.success('Photo uploaded!') }
+    else toast.error('Upload failed')
+    setUploading(false)
+  }
+
+  async function remove(url: string) {
+    await fetch('/api/hero-gallery', { method: 'DELETE', body: JSON.stringify({ url }), headers: { 'Content-Type': 'application/json' } })
+    setPhotos(p => p.filter(u => u !== url))
+    toast.success('Photo removed!')
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '14px' }}>
+        {photos.map((url, i) => (
+          <div key={i} style={{ position: 'relative', aspectRatio: '16/9', borderRadius: '8px', overflow: 'hidden', border: '2px solid var(--border)' }}>
+            <img src={url} alt={`Hero ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <button onClick={() => remove(url)} style={{ position: 'absolute', top: '4px', right: '4px', background: 'rgba(0,0,0,0.7)', color: '#fff', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', fontSize: '12px' }}>✕</button>
+            {i === 0 && <div style={{ position: 'absolute', bottom: '4px', left: '4px', background: 'var(--coral)', color: '#fff', fontSize: '8px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>MAIN</div>}
+          </div>
+        ))}
+        <div onClick={() => !uploading && fileRef.current?.click()} style={{ aspectRatio: '16/9', borderRadius: '8px', border: '2px dashed var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'var(--blush)', gap: '6px' }}>
+          <span style={{ fontSize: '24px' }}>+</span>
+          <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--muted)' }}>{uploading ? 'Uploading...' : 'Add Photo'}</span>
+        </div>
+      </div>
+      <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) upload(f) }} />
+      <div style={{ fontSize: '11px', color: 'var(--muted)' }}>First photo = main background. Others rotate every 5 seconds.</div>
+    </div>
+  )
 }
 
 export default function ContentTab() {
@@ -133,6 +182,12 @@ export default function ContentTab() {
               </div>
             </div>
             {saveBtn(['hero_name','hero_title','hero_quote','hero_description','hero_availability','hero_brands','hero_stat1','hero_stat1_lbl','hero_stat2','hero_stat2_lbl','hero_stat3','hero_stat3_lbl','hero_stat4','hero_stat4_lbl'])}
+          </div>
+
+          <div style={card}>
+            <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'8px'}}>🖼️ Hero Background Photos</div>
+            <div style={{fontSize:'12px',color:'var(--muted)',marginBottom:'16px'}}>Upload bridal photos to rotate as hero background. Best: 1200x800px landscape.</div>
+            <HeroGallery />
           </div>
         </>
       )}
