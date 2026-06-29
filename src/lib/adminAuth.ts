@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 
 export async function verifyAdminAuth(req: NextRequest): Promise<boolean> {
   const cookieStore = await cookies()
-  const session = cookieStore.get('admin_session')
-  return session?.value === process.env.ADMIN_PASSWORD
+  const token = cookieStore.get('admin_token')
+  return token?.value === 'authenticated'
 }
 
 export function unauthorizedResponse() {
