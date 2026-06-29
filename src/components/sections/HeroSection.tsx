@@ -105,7 +105,7 @@ export default function HeroSection() {
           color: #F0635A;
         }
         .hero-h1 {
-          font-size: clamp(24px, 5vw, 68px);
+          font-size: clamp(20px, 4vw, 60px);
           font-weight: 800;
           color: #ffffff;
           line-height: 1.1;
@@ -115,7 +115,7 @@ export default function HeroSection() {
         }
         .hero-h1 span { color: #F0635A; }
         .hero-sub {
-          font-size: clamp(12px, 1.8vw, 16px);
+          font-size: clamp(11px, 1.5vw, 15px);
           color: rgba(255,255,255,0.9);
           margin-bottom: 36px;
           font-style: italic;
@@ -195,6 +195,8 @@ export default function HeroSection() {
           background: #F0635A;
         }
         @media (max-width: 768px) {
+          .hero-h1 { font-size: 22px !important; }
+          .hero-sub { font-size: 12px !important; }
           .hero-content { padding: 80px 20px 60px; }
           .hero-btn-primary, .hero-btn-secondary { 
             min-width: 140px; 
