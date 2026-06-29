@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyAdminAuth, unauthorizedResponse } from '@/lib/adminAuth'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
+  if (!await verifyAdminAuth(req)) return unauthorizedResponse()
   const formData = await req.formData()
   const file = formData.get('file') as File
   if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })

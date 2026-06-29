@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { verifyAdminAuth, unauthorizedResponse } from '@/lib/adminAuth'
 
 export async function GET() {
   const { data, error } = await supabaseAdmin()
@@ -11,6 +12,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  if (!await verifyAdminAuth(req)) return unauthorizedResponse()
   const body = await req.json()
   const updates = Object.entries(body).map(([key, value]) => ({ key, value: String(value), updated_at: new Date().toISOString() }))
   const { error } = await supabaseAdmin()

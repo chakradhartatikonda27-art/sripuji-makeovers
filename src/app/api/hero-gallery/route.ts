@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase'
+import { verifyAdminAuth, unauthorizedResponse } from '@/lib/adminAuth'
 
 export async function GET() {
   const sb = supabaseAdmin()
@@ -9,6 +10,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  if (!await verifyAdminAuth(req)) return unauthorizedResponse()
   const sb = supabaseAdmin()
   const form = await req.formData()
   const file = form.get('file') as File
@@ -28,6 +30,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  if (!await verifyAdminAuth(req)) return unauthorizedResponse()
   const { url } = await req.json()
   const sb = supabaseAdmin()
   const { data: existing } = await sb.from('site_settings').select('value').eq('key', 'hero_gallery').single()
