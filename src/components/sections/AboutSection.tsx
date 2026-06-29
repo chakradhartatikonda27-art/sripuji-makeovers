@@ -39,15 +39,7 @@ export default function AboutSection() {
               </div>
             )}
           </div>
-          {!isMobile && (
-            <div style={{ position: 'relative', top: '-24px', left: '-20px', background: '#fff', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '24px' }}>🏆</span>
-              <div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--coral)', letterSpacing: '-0.5px', lineHeight: 1 }}>{s.about_stat1}</div>
-                <div style={{ fontSize: '9px', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--muted2)', marginTop: '2px' }}>{s.about_stat1_lbl}</div>
-              </div>
-            </div>
-          )}
+
         </motion.div>
 
         <motion.div initial={{ opacity: 0, x: isMobile ? 0 : 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1 }}>

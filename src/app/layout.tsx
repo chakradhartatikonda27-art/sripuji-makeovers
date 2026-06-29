@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
+import WhatsAppFloat from '@/components/layout/WhatsAppFloat'
 import Script from 'next/script'
 import { LOCAL_BUSINESS_SCHEMA, SITE } from '@/lib/constants'
 import { MobileProvider } from '@/context/MobileContext'
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MobileProvider>
           {children}
         </MobileProvider>
+        <WhatsAppFloat />
         <Toaster position="bottom-right"
           toastOptions={{
             style: { fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: '600', borderRadius: '8px', background: '#1A1A1A', color: '#fff' },

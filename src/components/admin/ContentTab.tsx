@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 
 import { useEffect, useState, useRef } from 'react'
 import toast from 'react-hot-toast'
@@ -12,10 +13,58 @@ interface Testimonial {
   is_active: boolean
 }
 
+
+function HeroGallery() {
+  const [photos, setPhotos] = React.useState<string[]>([])
+  const [uploading, setUploading] = React.useState(false)
+  const fileRef = React.useRef<HTMLInputElement>(null)
+
+  React.useEffect(() => {
+    fetch('/api/hero-gallery').then(r => r.json()).then(setPhotos).catch(() => {})
+  }, [])
+
+  async function upload(file: File) {
+    setUploading(true)
+    const fd = new FormData()
+    fd.append('file', file)
+    const res = await fetch('/api/hero-gallery', { method: 'POST', body: fd })
+    const data = await res.json()
+    if (res.ok) { setPhotos(p => [...p, data.url]); toast.success('Photo uploaded!') }
+    else toast.error('Upload failed')
+    setUploading(false)
+  }
+
+  async function remove(url: string) {
+    await fetch('/api/hero-gallery', { method: 'DELETE', body: JSON.stringify({ url }), headers: { 'Content-Type': 'application/json' } })
+    setPhotos(p => p.filter(u => u !== url))
+    toast.success('Photo removed!')
+  }
+
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', marginBottom: '14px' }}>
+        {photos.map((url, i) => (
+          <div key={i} style={{ position: 'relative', aspectRatio: '16/9', borderRadius: '8px', overflow: 'hidden', border: '2px solid var(--border)' }}>
+            <img src={url} alt={`Hero ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <button onClick={() => remove(url)} style={{ position: 'absolute', top: '4px', right: '4px', background: 'rgba(0,0,0,0.7)', color: '#fff', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', fontSize: '12px' }}>✕</button>
+            {i === 0 && <div style={{ position: 'absolute', bottom: '4px', left: '4px', background: 'var(--coral)', color: '#fff', fontSize: '8px', fontWeight: 700, padding: '2px 6px', borderRadius: '4px' }}>MAIN</div>}
+          </div>
+        ))}
+        <div onClick={() => !uploading && fileRef.current?.click()} style={{ aspectRatio: '16/9', borderRadius: '8px', border: '2px dashed var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: 'var(--blush)', gap: '6px' }}>
+          <span style={{ fontSize: '24px' }}>+</span>
+          <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--muted)' }}>{uploading ? 'Uploading...' : 'Add Photo'}</span>
+        </div>
+      </div>
+      <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files?.[0]; if (f) upload(f) }} />
+      <div style={{ fontSize: '11px', color: 'var(--muted)' }}>First photo = main background. Others rotate every 5 seconds.</div>
+    </div>
+  )
+}
+
 export default function ContentTab() {
   const [settings, setSettings]   = useState<Record<string, string>>({})
   const [tests, setTests]         = useState<Testimonial[]>([])
-  const [section, setSection]     = useState<'hero'|'about'|'services'|'reviews'|'contact'>('hero')
+  const [section, setSection]     = useState<'hero'|'about'|'services'|'reviews'|'contact'|'whychoose'>('hero')
   const [saving, setSaving]       = useState(false)
   const [uploading, setUploading] = useState(false)
   const [newTest, setNewTest]     = useState({ author:'', event:'', text:'', rating:5 })
@@ -80,9 +129,9 @@ export default function ContentTab() {
   return (
     <div>
       <div style={{display:'flex',gap:'8px',flexWrap:'wrap',marginBottom:'20px'}}>
-        {(['hero','about','services','reviews','contact'] as const).map(id=>(
+        {(['hero','about','services','reviews','contact','whychoose'] as const).map(id=>(
           <button key={id} onClick={()=>setSection(id)} style={secStyle(section===id)}>
-            {id==='hero'?'🏠 Hero':id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':'📞 Contact'}
+            {id==='hero'?'🏠 Hero':id==='about'?'👤 About & Photo':id==='services'?'💄 Services':id==='reviews'?'⭐ Reviews':id==='whychoose'?'✨ Why Choose':'📞 Contact'}
           </button>
         ))}
       </div>
@@ -133,6 +182,12 @@ export default function ContentTab() {
               </div>
             </div>
             {saveBtn(['hero_name','hero_title','hero_quote','hero_description','hero_availability','hero_brands','hero_stat1','hero_stat1_lbl','hero_stat2','hero_stat2_lbl','hero_stat3','hero_stat3_lbl','hero_stat4','hero_stat4_lbl'])}
+          </div>
+
+          <div style={card}>
+            <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'8px'}}>🖼️ Hero Background Photos</div>
+            <div style={{fontSize:'12px',color:'var(--muted)',marginBottom:'16px'}}>Upload bridal photos to rotate as hero background. Best: 1200x800px landscape.</div>
+            <HeroGallery />
           </div>
         </>
       )}
@@ -190,11 +245,61 @@ export default function ContentTab() {
         </>
       )}
 
+      {section==='whychoose' && (
+        <div style={card}>
+          <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>✨ Why Choose Us Section</div>
+          <div style={{fontSize:'12px',color:'var(--muted2)',marginBottom:'16px'}}>Edit the 6 reasons shown in the "Why Choose Sri Pujitha" section</div>
+          {[1,2,3,4,5,6].map(n=>(
+            <div key={n} style={{background:'var(--blush)',borderRadius:'10px',padding:'14px',marginBottom:'12px'}}>
+              <div style={{display:'grid',gridTemplateColumns:'60px 1fr',gap:'10px',marginBottom:'8px'}}>
+                <div>
+                  <label style={lbl}>Icon</label>
+                  <input value={settings[`why_icon${n}`]||''} onChange={e=>set(`why_icon${n}`,e.target.value)} style={{...inp,fontSize:'20px',textAlign:'center' as const}} placeholder="🎨"/>
+                </div>
+                <div>
+                  <label style={lbl}>Title</label>
+                  <input value={settings[`why_title${n}`]||''} onChange={e=>set(`why_title${n}`,e.target.value)} style={inp} placeholder="A Vision for Every Face"/>
+                </div>
+              </div>
+              <label style={lbl}>Description</label>
+              <textarea value={settings[`why_desc${n}`]||''} onChange={e=>set(`why_desc${n}`,e.target.value)} rows={2} style={{...inp,resize:'vertical' as const}} placeholder="Every look is crafted..."/>
+            </div>
+          ))}
+          {saveBtn(['why_icon1','why_title1','why_desc1','why_icon2','why_title2','why_desc2','why_icon3','why_title3','why_desc3','why_icon4','why_title4','why_desc4','why_icon5','why_title5','why_desc5','why_icon6','why_title6','why_desc6'])}
+        </div>
+      )}
+
       {section==='services' && (
+        <>
+        <div style={card}>
+          <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>📋 Booking Policy</div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Advance Payment Policy</label>
+            <input value={settings.policy_advance||''} onChange={e=>set('policy_advance',e.target.value)} style={inp} placeholder="e.g. 20% advance required to confirm booking" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Cancellation Policy</label>
+            <textarea value={settings.policy_cancellation||''} onChange={e=>set('policy_cancellation',e.target.value)} rows={3} style={{...inp,resize:'vertical' as const}} placeholder="e.g. Cancellations within 48 hours will forfeit the advance payment." onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Rescheduling Policy</label>
+            <textarea value={settings.policy_reschedule||''} onChange={e=>set('policy_reschedule',e.target.value)} rows={3} style={{...inp,resize:'vertical' as const}} placeholder="e.g. Rescheduling allowed up to 72 hours before the event." onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Travel Policy</label>
+            <input value={settings.policy_travel||''} onChange={e=>set('policy_travel',e.target.value)} style={inp} placeholder="e.g. Travel charges applicable beyond 20km from Rajahmundry" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Trial Makeup Policy</label>
+            <input value={settings.policy_trial||''} onChange={e=>set('policy_trial',e.target.value)} style={inp} placeholder="e.g. Paid trial available at ₹1500, adjustable against bridal booking" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          {saveBtn(['policy_advance','policy_cancellation','policy_reschedule','policy_travel','policy_trial'])}
+        </div>
         <div style={card}>
           <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>💄 Services & Pricing</div>
           <ServiceEditor/>
         </div>
+        </>
       )}
 
       {section==='reviews' && (
