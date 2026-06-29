@@ -270,10 +270,36 @@ export default function ContentTab() {
       )}
 
       {section==='services' && (
+        <>
+        <div style={card}>
+          <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>📋 Booking Policy</div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Advance Payment Policy</label>
+            <input value={settings.policy_advance||''} onChange={e=>set('policy_advance',e.target.value)} style={inp} placeholder="e.g. 20% advance required to confirm booking" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Cancellation Policy</label>
+            <textarea value={settings.policy_cancellation||''} onChange={e=>set('policy_cancellation',e.target.value)} rows={3} style={{...inp,resize:'vertical' as const}} placeholder="e.g. Cancellations within 48 hours will forfeit the advance payment." onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Rescheduling Policy</label>
+            <textarea value={settings.policy_reschedule||''} onChange={e=>set('policy_reschedule',e.target.value)} rows={3} style={{...inp,resize:'vertical' as const}} placeholder="e.g. Rescheduling allowed up to 72 hours before the event." onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Travel Policy</label>
+            <input value={settings.policy_travel||''} onChange={e=>set('policy_travel',e.target.value)} style={inp} placeholder="e.g. Travel charges applicable beyond 20km from Rajahmundry" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          <div style={{marginBottom:'12px'}}>
+            <label style={lbl}>Trial Makeup Policy</label>
+            <input value={settings.policy_trial||''} onChange={e=>set('policy_trial',e.target.value)} style={inp} placeholder="e.g. Paid trial available at ₹1500, adjustable against bridal booking" onFocus={e=>e.target.style.borderColor='var(--coral)'} onBlur={e=>e.target.style.borderColor='var(--border)'}/>
+          </div>
+          {saveBtn(['policy_advance','policy_cancellation','policy_reschedule','policy_travel','policy_trial'])}
+        </div>
         <div style={card}>
           <div style={{fontSize:'14px',fontWeight:700,color:'var(--ink)',marginBottom:'16px'}}>💄 Services & Pricing</div>
           <ServiceEditor/>
         </div>
+        </>
       )}
 
       {section==='reviews' && (
