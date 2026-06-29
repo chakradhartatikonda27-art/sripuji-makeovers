@@ -8,11 +8,11 @@ import { NAV_LINKS, SITE } from '@/lib/constants'
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen]         = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
   const pathname = usePathname()
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024)
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
     const fn = () => setScrolled(window.scrollY > 30)
