@@ -86,7 +86,7 @@ export default function ContentTab() {
     setSaving(true)
     const payload:Record<string,string>={}
     keys.forEach(k=>{payload[k]=settings[k]||''})
-    const res=await fetch('/api/site-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    const res=await fetch('/api/site-settings',{method:'POST',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify(payload),credentials:'include'})
     if(res.ok) toast.success('Saved!')
     else toast.error('Save failed')
     setSaving(false)
@@ -95,7 +95,7 @@ export default function ContentTab() {
   async function uploadPhoto(file:File){
     setUploading(true)
     const fd=new FormData();fd.append('file',file)
-    const res=await fetch('/api/site-settings/upload',{method:'POST',body:fd})
+    const res=await fetch('/api/site-settings/upload',{method:'POST',body:fd,credentials:'include'})
     const data=await res.json()
     if(res.ok){toast.success('Photo uploaded!');set('about_photo_url',data.url);load()}
     else toast.error(data.error||'Upload failed')
@@ -104,19 +104,19 @@ export default function ContentTab() {
 
   async function addTestimonial(){
     if(!newTest.author||!newTest.text){toast.error('Name and review required');return}
-    const res=await fetch('/api/testimonials',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(newTest)})
+    const res=await fetch('/api/testimonials',{method:'POST',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify(newTest)})
     if(res.ok){toast.success('Review added!');setNewTest({author:'',event:'',text:'',rating:5});load()}
     else toast.error('Failed')
   }
 
   async function deleteTestimonial(id:string){
     if(!confirm('Delete this review?'))return
-    const res=await fetch('/api/testimonials',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})})
+    const res=await fetch('/api/testimonials',{method:'DELETE',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({id})})
     if(res.ok){toast.success('Deleted!');load()}
   }
 
   async function toggleTest(id:string,is_active:boolean){
-    await fetch('/api/testimonials',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,is_active:!is_active})})
+    await fetch('/api/testimonials',{method:'PATCH',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({id,is_active:!is_active})})
     load()
   }
 
@@ -383,7 +383,7 @@ function ServiceEditor(){
   function update(id:string,field:string,value:any){setServices(prev=>prev.map(s=>s.id===id?{...s,[field]:value}:s))}
   async function save(svc:any){
     setSaving(svc.id)
-    const res=await fetch('/api/services',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:svc.id,name:svc.name,price:svc.price,is_active:svc.is_active})})
+    const res=await fetch('/api/services',{method:'PATCH',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({id:svc.id,name:svc.name,price:svc.price,is_active:svc.is_active})})
     if(res.ok) toast.success(`\${svc.name} saved!`)
     else toast.error('Save failed')
     setSaving(null)

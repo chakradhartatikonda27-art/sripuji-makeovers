@@ -55,9 +55,9 @@ export default function AdminPage() {
     setBookings(f)
   },[search,statusFilter,all])
 
-  async function logout(){await fetch('/api/admin/auth',{method:'DELETE'});router.push('/admin/login')}
+  async function logout(){await fetch('/api/admin/auth',{method:'DELETE',credentials:'include'});router.push('/admin/login')}
   async function updateStatus(id:string,status:string){
-    const res=await fetch(`/api/bookings/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})})
+    const res=await fetch(`/api/bookings/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({status})})
     if(res.ok){
       toast.success(`Booking ${status}!`)
       // Find booking details for WhatsApp
@@ -77,11 +77,11 @@ export default function AdminPage() {
     }else toast.error('Failed')
   }
   async function blockDate(date:string){
-    const res=await fetch('/api/blocked-dates',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})})
+    const res=await fetch('/api/blocked-dates',{method:'POST',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({date})})
     if(res.ok){toast.success(`${date} blocked`);load()}else toast.error('Already blocked')
   }
   async function unblockDate(date:string){
-    await fetch('/api/blocked-dates',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({date})})
+    await fetch('/api/blocked-dates',{method:'DELETE',headers:{'Content-Type':'application/json',credentials:'include'},body:JSON.stringify({date})})
     toast.success(`${date} unblocked`);load()
   }
   async function addBooking() {

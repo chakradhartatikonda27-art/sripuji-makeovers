@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyAdminAuth, unauthorizedResponse } from '@/lib/adminAuth'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function GET() {
@@ -9,6 +10,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
+  if (!await verifyAdminAuth(req)) return unauthorizedResponse()
   const { id, ...updates } = await req.json()
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
   const { error } = await supabaseAdmin()
