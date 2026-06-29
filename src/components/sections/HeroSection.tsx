@@ -94,8 +94,8 @@ export default function HeroSection() {
           background: rgba(240,99,90,0.2);
           border: 1px solid rgba(240,99,90,0.5);
           border-radius: 50px;
-          padding: 6px 20px;
-          margin-bottom: 20px;
+          padding: 5px 14px;
+          margin-bottom: 16px;
         }
         .hero-badge span {
           font-size: 9px;
@@ -214,7 +214,7 @@ export default function HeroSection() {
 
         <div className="hero-content">
           <div className="hero-badge">
-            <span>Sripuji Makeovers · Rajahmundry</span>
+            <span className="hero-badge-text">Sripuji Makeovers</span>
           </div>
 
           <h1 className="hero-h1">
