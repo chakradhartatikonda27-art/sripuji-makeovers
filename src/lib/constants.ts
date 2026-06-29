@@ -57,6 +57,7 @@ export const NAV_LINKS = [
   { label: 'Reviews',    href: '/#reviews' },
   { label: 'Contact',    href: '/contact' },
   { label: 'My Booking', href: '/my-booking' },
+  { label: 'Admin',      href: '/admin' },
 ]
 
 export const PORTFOLIO_ITEMS = [
