@@ -50,16 +50,13 @@ export const TESTIMONIALS = [
 ]
 
 export const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'About',     href: '/#about' },
-  { label: 'Services',  href: '/services' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Reviews',   href: '/#reviews' },
-  { label: 'Contact',   href: '/contact' },
+  { label: 'Home',       href: '/' },
+  { label: 'About',      href: '/#about' },
+  { label: 'Services',   href: '/services' },
+  { label: 'Portfolio',  href: '/portfolio' },
+  { label: 'Reviews',    href: '/#reviews' },
+  { label: 'Contact',    href: '/contact' },
   { label: 'My Booking', href: '/my-booking' },
-  { label: 'Track Booking', href: '/booking/status' },
-  { label: 'Location',  href: '/#location' },
-  { label: 'Admin',     href: '/admin' },
 ]
 
 export const PORTFOLIO_ITEMS = [
