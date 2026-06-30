@@ -22,7 +22,6 @@ export async function GET(req: NextRequest) {
     .is('google_event_id', null)
     .order('booking_date')
 
-  console.log(`Syncing ${bookings?.length || 0} bookings to Google Calendar`)
 
   for (const bk of bookings || []) {
     try {
@@ -41,7 +40,6 @@ export async function GET(req: NextRequest) {
     .lte('blocked_date', '2026-07-31')
     .is('google_event_id', null)
 
-  console.log(`Syncing ${blockedDates?.length || 0} blocked dates to Google Calendar`)
 
   for (const bd of blockedDates || []) {
     try {

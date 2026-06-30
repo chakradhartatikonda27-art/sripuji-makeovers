@@ -52,7 +52,6 @@ export async function POST(req: NextRequest) {
     const today   = now.toISOString().split('T')[0]
     let reply     = ''
 
-    console.log('Message from:', from, 'Text:', text)
 
     // Only artist can use bot
     if (from !== ARTIST_PHONE) return NextResponse.json({ status: 'ok' })

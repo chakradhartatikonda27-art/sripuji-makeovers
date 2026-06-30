@@ -28,8 +28,7 @@ export default function HeroSection() {
     return () => clearInterval(t)
   }, [gallery.length])
 
-  const FALLBACK = 'https://bdudqnctoynjtihJskph.supabase.co/storage/v1/object/public/portfolio/hero/1782657636951.JPG'
-  const heroImg = gallery.length > 0 ? gallery[currentPhoto] : FALLBACK
+  const heroImg = gallery[currentPhoto] || ''
 
   return (
     <>

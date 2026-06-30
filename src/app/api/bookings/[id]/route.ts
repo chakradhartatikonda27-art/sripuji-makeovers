@@ -39,7 +39,6 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   try {
     if (body.status === 'confirmed') {
       const calResult = await syncBookingToCalendar(data, 'create')
-      console.log('Google Calendar sync result:', JSON.stringify(calResult))
     } else if (body.status === 'cancelled') {
       await syncBookingToCalendar(data, 'delete')
     }
