@@ -86,7 +86,7 @@ export default function ContentTab() {
     setSaving(true)
     const payload:Record<string,string>={}
     keys.forEach(k=>{payload[k]=settings[k]||''})
-    const res=await fetch('/api/site-settings',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(payload),credentials:'include'})
+    const res=await fetch('/api/site-settings',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(payload)})
     if(res.ok) toast.success('Saved!')
     else toast.error('Save failed')
     setSaving(false)
