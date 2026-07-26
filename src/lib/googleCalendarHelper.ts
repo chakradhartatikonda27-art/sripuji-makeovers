@@ -20,6 +20,7 @@ async function getValidAccessToken(): Promise<string | null> {
 
   if (!accessToken || Date.now() > expiry - 5 * 60 * 1000) {
     const tokens = await refreshAccessToken(refreshToken)
+    console.error('Token refresh response:', JSON.stringify(tokens).slice(0,200))
     if (tokens.access_token) {
       await sb.from('site_settings').upsert([
         { key: 'google_access_token', value: tokens.access_token },
@@ -40,8 +41,7 @@ export async function syncBookingToCalendar(booking: any, action: 'create' | 'de
     if (action === 'create') {
       const event = await createCalendarEvent(accessToken, booking)
       if (event.id) {
-        const updateResult = await supabaseAdmin().from('bookings').update({ google_event_id: event.id }).eq('id', booking.id).select()
-        console.error('Calendar event ID update result:', JSON.stringify(updateResult))
+        await supabaseAdmin().from('bookings').update({ google_event_id: event.id }).eq('id', booking.id)
       }
       return event
     } else {
