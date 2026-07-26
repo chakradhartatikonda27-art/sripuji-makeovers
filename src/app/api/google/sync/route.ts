@@ -17,8 +17,7 @@ export async function GET(req: NextRequest) {
   const { data: bookings } = await sb.from('bookings')
     .select('*')
     .in('status', ['confirmed', 'pending'])
-    .gte('booking_date', '2026-06-01')
-    .lte('booking_date', '2026-07-31')
+    .gte('booking_date', new Date().toISOString().split('T')[0])
     .is('google_event_id', null)
     .order('booking_date')
 
@@ -36,8 +35,7 @@ export async function GET(req: NextRequest) {
   // Sync all blocked dates from June + July
   const { data: blockedDates } = await sb.from('blocked_dates')
     .select('*')
-    .gte('blocked_date', '2026-06-01')
-    .lte('blocked_date', '2026-07-31')
+    .gte('blocked_date', new Date().toISOString().split('T')[0])
     .is('google_event_id', null)
 
 
