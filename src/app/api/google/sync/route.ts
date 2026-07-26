@@ -26,8 +26,8 @@ export async function GET(req: NextRequest) {
     try {
       await syncBookingToCalendar(bk, 'create')
       results.bookings.synced++
-    } catch (e) {
-      console.error(`Failed to sync booking ${bk.id}:`, e)
+    } catch (e: any) {
+      console.error(`Failed to sync booking ${bk.id}: ${e.message}`, e)
       results.bookings.failed++
     }
   }
@@ -49,5 +49,6 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  console.log('Sync complete:', JSON.stringify(results))
   return NextResponse.json({ success: true, results })
 }
