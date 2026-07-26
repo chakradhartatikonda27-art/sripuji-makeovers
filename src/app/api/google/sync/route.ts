@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   // Sync all confirmed/pending bookings from June + July
   const { data: bookings } = await sb.from('bookings')
     .select('*')
-    .in('status', ['confirmed', 'pending'])
+    .in('status', ['confirmed', 'pending', 'completed'])
     .gte('booking_date', new Date().toISOString().split('T')[0])
     .is('google_event_id', null)
     .order('booking_date')
