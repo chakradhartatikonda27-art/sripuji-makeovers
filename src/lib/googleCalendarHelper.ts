@@ -40,7 +40,8 @@ export async function syncBookingToCalendar(booking: any, action: 'create' | 'de
     if (action === 'create') {
       const event = await createCalendarEvent(accessToken, booking)
       if (event.id) {
-        await supabaseAdmin().from('bookings').update({ google_event_id: event.id }).eq('id', booking.id)
+        const updateResult = await supabaseAdmin().from('bookings').update({ google_event_id: event.id }).eq('id', booking.id).select()
+        console.error('Calendar event ID update result:', JSON.stringify(updateResult))
       }
       return event
     } else {
